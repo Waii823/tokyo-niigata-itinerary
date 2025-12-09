@@ -4,21 +4,17 @@
   <meta charset="UTF-8" />
   <title>2026 日本東京 × 越後湯澤 × 新潟 9 天與陸少XD同行行程</title>
 
-  <!-- Google Fonts：中英優雅字體 -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts：中英優雅字體（加上 data-versioned 用來自動帶版本號） -->
+  <link data-versioned="true" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 
-  <!-- Leaflet Map -->
+  <!-- Leaflet Map（同樣加上 data-versioned） -->
   <link
     rel="stylesheet"
+    data-versioned="true"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
 
   <style>
     :root {
@@ -610,6 +606,14 @@
     </main>
   </div>
 
+  <!-- Leaflet Script（加上 data-versioned 用 cache-busting） -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+    data-versioned="true"
+  ></script>
+
   <script>
     // === 核心行程資料（1天東京 + 8天新潟縣，含2天滑雪） ===
     const initialItinerary = [
@@ -1177,16 +1181,6 @@
     }
 
     // === 初始化 ===
-    let itineraryState = JSON.parse(JSON.stringify(initialItinerary));
-
-    function resetItinerary() {
-      itinerary = JSON.parse(JSON.stringify(initialItinerary));
-      renderItinerary();
-      updateBudgetSummary();
-      updateMap();
-    }
-
-    // 這裡直接用 itinerary（不是 itineraryState），避免混淆
     renderItinerary();
     updateBudgetSummary();
     renderRestaurants();
@@ -1199,6 +1193,39 @@
       updateBudgetSummary();
       updateMap();
     });
+  </script>
+
+  <!-- 🔄 自動版本編號（cache-buster）：針對 data-versioned="true" 的 <link> / <script> 加上 ?v=timestamp -->
+  <script>
+    (function () {
+      const version = new Date().getTime();
+
+      window.addEventListener('load', function () {
+        document
+          .querySelectorAll('link[rel="stylesheet"][data-versioned="true"]')
+          .forEach(function (link) {
+            try {
+              const url = new URL(link.href);
+              url.searchParams.set('v', version);
+              link.href = url.toString();
+            } catch (e) {
+              // 忽略無法解析的 URL
+            }
+          });
+
+        document
+          .querySelectorAll('script[src][data-versioned="true"]')
+          .forEach(function (script) {
+            try {
+              const url = new URL(script.src);
+              url.searchParams.set('v', version);
+              script.src = url.toString();
+            } catch (e) {
+              // 忽略無法解析的 URL
+            }
+          });
+      });
+    })();
   </script>
 </body>
 </html>
