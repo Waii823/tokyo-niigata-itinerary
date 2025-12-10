@@ -61,7 +61,6 @@
       overflow: hidden;
     }
 
-    /* 背景裝飾圓圈 */
     .page::before,
     .page::after {
       content: "";
@@ -199,7 +198,6 @@
       z-index: 1;
     }
 
-    /* 行程與地圖容器 */
     .panel {
       border-radius: var(--radius-xl);
       background: rgba(255,255,255,0.9);
@@ -240,7 +238,6 @@
       color: var(--text-muted);
     }
 
-    /* 行程列表 */
     .itinerary-list {
       display: flex;
       flex-direction: column;
@@ -347,7 +344,77 @@
       color: var(--text-muted);
     }
 
-    /* 地圖與餐廳區 */
+    .day-actual {
+      margin-top: 6px;
+      padding-top: 4px;
+      border-top: 1px dashed rgba(58,82,110,0.12);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .day-actual label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+      color: var(--blue-deep);
+    }
+
+    .day-actual input {
+      width: 110px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(58,82,110,0.25);
+      font-size: 11px;
+      text-align: right;
+      outline: none;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .day-actual input[readonly] {
+      background: rgba(245,246,250,0.9);
+      cursor: default;
+    }
+
+    .day-actual input:focus {
+      border-color: var(--gold-warm);
+      box-shadow: 0 0 0 1px rgba(201,163,107,0.32);
+      background: #fffdf8;
+    }
+
+    .day-actual-note {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .day-actual button.detail-btn {
+      margin-left: auto;
+      border-radius: 999px;
+      border: 1px solid rgba(201,163,107,0.8);
+      background: linear-gradient(135deg, #fffaf2, #f0e0c6);
+      padding: 3px 10px;
+      font-size: 11px;
+      color: #6a4a21;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 5px 12px rgba(120, 80, 30, 0.18);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        background var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .day-actual button.detail-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(120, 80, 30, 0.28);
+      background: linear-gradient(135deg, #fff4dd, #ead0aa);
+    }
+
     #map {
       width: 100%;
       height: 260px;
@@ -443,7 +510,6 @@
       margin-top: 2px;
     }
 
-    /* 行程工具列 */
     .toolbar {
       display: flex;
       justify-content: space-between;
@@ -484,6 +550,208 @@
       background: radial-gradient(circle at 30% 20%, #fffefa, #e0c293);
     }
 
+    [contenteditable="true"] {
+      cursor: text;
+    }
+
+    [contenteditable="true"]:focus {
+      outline: 1px dashed rgba(201,163,107,0.7);
+      outline-offset: 2px;
+      background-color: rgba(255,250,240,0.7);
+    }
+
+    .expense-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 18, 35, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(6px);
+    }
+
+    .expense-overlay.hidden {
+      display: none;
+    }
+
+    .expense-panel {
+      width: min(880px, 96vw);
+      max-height: 90vh;
+      background: linear-gradient(145deg, #ffffff, #f5f6fb);
+      border-radius: 24px;
+      box-shadow: 0 26px 80px rgba(8, 15, 30, 0.65);
+      padding: 18px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .expense-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(58,82,110,0.12);
+      padding-bottom: 6px;
+    }
+
+    .expense-title-main {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue-deep);
+    }
+
+    .expense-title-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .expense-close-btn {
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 999px;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .expense-close-btn:hover {
+      background: rgba(58,82,110,0.06);
+      color: var(--blue-deep);
+    }
+
+    .expense-body {
+      flex: 1;
+      overflow: auto;
+      padding: 4px 0 0;
+      font-size: 12px;
+      color: var(--text-main);
+    }
+
+    .expense-intro {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .expense-table-wrapper {
+      border-radius: 16px;
+      border: 1px solid rgba(58,82,110,0.12);
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 10px 30px rgba(20, 33, 61, 0.1);
+      overflow: hidden;
+    }
+
+    table.expense-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    table.expense-table thead {
+      background: linear-gradient(135deg, #f4f5fb, #e8edf7);
+    }
+
+    table.expense-table th,
+    table.expense-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid rgba(58,82,110,0.08);
+      text-align: left;
+    }
+
+    table.expense-table th {
+      font-weight: 600;
+      color: var(--blue-deep);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    table.expense-table td input[type="text"],
+    table.expense-table td input[type="number"] {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(58,82,110,0.25);
+      padding: 3px 6px;
+      font-size: 11px;
+      outline: none;
+      background: rgba(255,255,255,0.95);
+    }
+
+    table.expense-table td input[type="number"] {
+      text-align: right;
+    }
+
+    table.expense-table td input:focus {
+      border-color: var(--gold-warm);
+      box-shadow: 0 0 0 1px rgba(201,163,107,0.26);
+      background: #fffdf8;
+    }
+
+    .expense-remove-row-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(220,80,80,0.5);
+      background: rgba(220,80,80,0.06);
+      color: #a33a3a;
+      font-size: 10px;
+      padding: 2px 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .expense-remove-row-btn:hover {
+      background: rgba(220,80,80,0.12);
+    }
+
+    .expense-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .expense-totals span {
+      margin-right: 10px;
+    }
+
+    .expense-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .expense-add-row-btn {
+      border-radius: 999px;
+      border: 1px dashed rgba(58,82,110,0.4);
+      background: rgba(58,82,110,0.03);
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--blue-deep);
+      cursor: pointer;
+    }
+
+    .expense-save-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(201,163,107,0.9);
+      background: linear-gradient(135deg, #fffaf2, #f0e0c6);
+      padding: 4px 12px;
+      font-size: 11px;
+      color: #6a4a21;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(120, 80, 30, 0.22);
+      white-space: nowrap;
+    }
+
+    .expense-save-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 9px 24px rgba(120, 80, 30, 0.28);
+    }
+
     @media (max-width: 960px) {
       body {
         padding: 12px;
@@ -508,7 +776,7 @@
   <div class="page">
     <header>
       <div class="title-block">
-        <h1>Tokyo × 越後湯澤 × 新潟｜9天冬季與陸少XD同行行程</h1>
+        <h1>東京 × 越後湯澤 × 新潟｜9天與陸少XD同行冬季行程</h1>
         <div class="subtitle">
           2026/1/10 夜晚抵達東京 · 2026/1/18 16:55 自東京返程<br />
           1天東京過夜 · 8天越後湯澤 & 新潟雪國（含移動日） · 含2天滑雪 & 溫泉
@@ -539,6 +807,10 @@
           <span id="dailyRange">–</span>
         </div>
         <div class="budget-row">
+          <span>已記錄實際總花費</span>
+          <span id="actualTotal">尚未填寫</span>
+        </div>
+        <div class="budget-row">
           <span>主要花費</span>
           <span>交通 · 滑雪套票 · 餐飲 · 門票</span>
         </div>
@@ -555,16 +827,16 @@
         <div class="panel-header">
           <div>
             <div class="panel-title">
-              <span class="panel-title-dot"></span> 互動行程表（可拖拽排序）
+              <span class="panel-title-dot"></span> 互動行程表（可拖拽排序 / 可編輯文字）
             </div>
             <div class="panel-subtitle">
-              拖曳每一天即可重新排程，右側地圖動線與預算將同步更新。
+              拖曳每一天可以重新排程；直接點擊標題、說明、行<br />程項目可修改文字；可記錄兩人每日花費。
             </div>
           </div>
           <div class="toolbar">
-            <span>提示：手機長按日卡拖曳 · 桌機按住拖動</span>
+            <span>提示：手機長按日卡拖曳<br />&emsp;&emsp;&emsp;桌機按住拖動</span>
             <button id="resetOrderBtn">
-              <span class="icon"></span> 回到建議排序
+              <span class="icon"></span> 回到建議排序<br />（會清除所有記錄）
             </button>
           </div>
         </div>
@@ -606,6 +878,51 @@
     </main>
   </div>
 
+  <!-- 記帳分頁覆蓋層 -->
+  <div id="expenseOverlay" class="expense-overlay hidden">
+    <div class="expense-panel">
+      <div class="expense-header">
+        <div>
+          <div id="expenseTitleMain" class="expense-title-main"></div>
+          <div id="expenseTitleSub" class="expense-title-sub"></div>
+        </div>
+        <button type="button" class="expense-close-btn" id="expenseCloseBtn">關閉 ✕</button>
+      </div>
+      <div class="expense-body">
+        <div class="expense-intro">
+          本頁可記錄<strong>當天的消費明細</strong>，並分別輸入 Lok / Wai 的金額。<br>
+          例如：餐費、車票、門票、租借裝備等。按「儲存並關閉」後會自動加總，寫回列表中的「實際花費」。
+        </div>
+        <div class="expense-table-wrapper">
+          <table class="expense-table">
+            <thead>
+              <tr>
+                <th style="width: 42%;">消費項目 / 備註</th>
+                <th style="width: 18%;">Lok (JPY)</th>
+                <th style="width: 18%;">Wai (JPY)</th>
+                <th style="width: 10%;">合計</th>
+                <th style="width: 12%; text-align:center;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="expense-footer">
+        <div class="expense-totals">
+          <span id="expenseTotalA">Lok：0 JPY</span>
+          <span id="expenseTotalB">Wai：0 JPY</span>
+          <span id="expenseTotalBoth">兩人合計：0 JPY</span>
+        </div>
+        <div class="expense-actions">
+          <button type="button" class="expense-add-row-btn" id="expenseAddRowBtn">＋ 新增一筆消費</button>
+          <button type="button" class="expense-save-btn" id="expenseSaveBtn">儲存並關閉</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Leaflet Script（加上 data-versioned 用 cache-busting） -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -614,8 +931,35 @@
     data-versioned="true"
   ></script>
 
-  <script>
-    // === 核心行程資料（1天東京 + 8天新潟縣，含2天滑雪） ===
+  <!-- 主程式：改成 ES module，加入 Firebase Firestore 多人同步 -->
+  <script type="module">
+    // === Firebase 初始化（使用 CDN 版本） ===
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA56n9PCvDn2izWf3cxm8BVWcMK-bPD6OQ",
+      authDomain: "tokyo-trip-2026-5edba.firebaseapp.com",
+      projectId: "tokyo-trip-2026-5edba",
+      storageBucket: "tokyo-trip-2026-5edba.firebasestorage.app",
+      messagingSenderId: "565813798352",
+      appId: "1:565813798352:web:50bfe09838fa0f6553c5d5",
+      measurementId: "G-0XL0C88XX6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 使用單一 document 存整份行程＋記帳資料
+    const tripDocRef = doc(db, "trips", "tokyo-trip-2026");
+
+    // === 基礎行程資料 ===
     const initialItinerary = [
       {
         id: 1,
@@ -632,18 +976,8 @@
         ],
         tags: ["抵達日", "輕鬆行程", "城市夜景"],
         spots: [
-          {
-            name: "東京站",
-            lat: 35.681236,
-            lng: 139.767125,
-            type: "tokyo"
-          },
-          {
-            name: "新宿站",
-            lat: 35.690921,
-            lng: 139.700257,
-            type: "tokyo"
-          }
+          { name: "東京站", lat: 35.681236, lng: 139.767125, type: "tokyo" },
+          { name: "新宿站", lat: 35.690921, lng: 139.700257, type: "tokyo" }
         ],
         budget: {
           min: 9000,
@@ -666,24 +1000,9 @@
         ],
         tags: ["移動日", "新潟縣", "清酒體驗", "溫泉"],
         spots: [
-          {
-            name: "東京站",
-            lat: 35.681236,
-            lng: 139.767125,
-            type: "tokyo"
-          },
-          {
-            name: "越後湯澤站",
-            lat: 36.9361,
-            lng: 138.8099,
-            type: "niigata"
-          },
-          {
-            name: "越後湯澤 Ponshukan",
-            lat: 36.9364,
-            lng: 138.8096,
-            type: "niigata"
-          }
+          { name: "東京站", lat: 35.681236, lng: 139.767125, type: "tokyo" },
+          { name: "越後湯澤站", lat: 36.9361, lng: 138.8099, type: "niigata" },
+          { name: "越後湯澤 Ponshukan", lat: 36.9364, lng: 138.8096, type: "niigata" }
         ],
         budget: {
           min: 14000,
@@ -706,18 +1025,8 @@
         ],
         tags: ["滑雪", "雪國體驗", "溫泉旅館"],
         spots: [
-          {
-            name: "越後湯澤站",
-            lat: 36.9361,
-            lng: 138.8099,
-            type: "niigata"
-          },
-          {
-            name: "GALA 湯澤滑雪場",
-            lat: 36.950483,
-            lng: 138.799478,
-            type: "niigata"
-          }
+          { name: "越後湯澤站", lat: 36.9361, lng: 138.8099, type: "niigata" },
+          { name: "GALA 湯澤滑雪場", lat: 36.950483, lng: 138.799478, type: "niigata" }
         ],
         budget: {
           min: 18000,
@@ -740,18 +1049,8 @@
         ],
         tags: ["滑雪", "雪國體驗", "巴士移動"],
         spots: [
-          {
-            name: "越後湯澤站 / 溫泉街",
-            lat: 36.9361,
-            lng: 138.8099,
-            type: "niigata"
-          },
-          {
-            name: "Kagura 滑雪場",
-            lat: 36.835,
-            lng: 138.802,
-            type: "niigata"
-          }
+          { name: "越後湯澤站 / 溫泉街", lat: 36.9361, lng: 138.8099, type: "niigata" },
+          { name: "Kagura 滑雪場", lat: 36.835, lng: 138.802, type: "niigata" }
         ],
         budget: {
           min: 17000,
@@ -774,12 +1073,7 @@
         ],
         tags: ["溫泉小鎮", "低強度行程", "療癒日"],
         spots: [
-          {
-            name: "越後湯澤溫泉街",
-            lat: 36.9361,
-            lng: 138.8099,
-            type: "niigata"
-          }
+          { name: "越後湯澤溫泉街", lat: 36.9361, lng: 138.8099, type: "niigata" }
         ],
         budget: {
           min: 9000,
@@ -802,12 +1096,7 @@
         ],
         tags: ["自然景觀", "藝術祭", "一日小旅行"],
         spots: [
-          {
-            name: "清津峽 Tunnel of Light",
-            lat: 37.0656,
-            lng: 138.6711,
-            type: "niigata"
-          }
+          { name: "清津峽 Tunnel of Light", lat: 37.0656, lng: 138.6711, type: "niigata" }
         ],
         budget: {
           min: 10000,
@@ -830,24 +1119,9 @@
         ],
         tags: ["移動日", "城市散步", "日本海海景"],
         spots: [
-          {
-            name: "越後湯澤站",
-            lat: 36.9361,
-            lng: 138.8099,
-            type: "niigata"
-          },
-          {
-            name: "新潟站",
-            lat: 37.912051855,
-            lng: 139.061245322,
-            type: "niigata"
-          },
-          {
-            name: "萬代橋",
-            lat: 37.9187,
-            lng: 139.0544,
-            type: "niigata"
-          }
+          { name: "越後湯澤站", lat: 36.9361, lng: 138.8099, type: "niigata" },
+          { name: "新潟站", lat: 37.912051855, lng: 139.061245322, type: "niigata" },
+          { name: "萬代橋", lat: 37.9187, lng: 139.0544, type: "niigata" }
         ],
         budget: {
           min: 11000,
@@ -870,12 +1144,7 @@
         ],
         tags: ["海鮮市場", "清酒文化", "放鬆日"],
         spots: [
-          {
-            name: "Pier Bandai",
-            lat: 37.9178,
-            lng: 139.0543,
-            type: "niigata"
-          }
+          { name: "Pier Bandai", lat: 37.9178, lng: 139.0543, type: "niigata" }
         ],
         budget: {
           min: 10000,
@@ -898,18 +1167,8 @@
         ],
         tags: ["返程日", "最後採買", "新幹線移動"],
         spots: [
-          {
-            name: "新潟站",
-            lat: 37.912051855,
-            lng: 139.061245322,
-            type: "niigata"
-          },
-          {
-            name: "東京站",
-            lat: 35.681236,
-            lng: 139.767125,
-            type: "tokyo"
-          }
+          { name: "新潟站", lat: 37.912051855, lng: 139.061245322, type: "niigata" },
+          { name: "東京站", lat: 35.681236, lng: 139.767125, type: "tokyo" }
         ],
         budget: {
           min: 11000,
@@ -919,7 +1178,6 @@
       }
     ];
 
-    // 餐廳推薦（用 Google Maps 搜尋網址，實際營業時間交給 Google 顯示）
     const restaurants = [
       {
         area: "越後湯澤溫泉街",
@@ -965,16 +1223,98 @@
       }
     ];
 
+    // === 狀態：行程 + 記帳明細 ===
     let itinerary = JSON.parse(JSON.stringify(initialItinerary));
+    let expenseDetails = {}; // { [dayId]: [{desc, a, b}] }
 
-    // === DOM 元素 ===
+    // === Firestore 同步：從雲端載入 / 儲存 / 監聽 ===
+    async function loadFromCloud() {
+      try {
+        const snap = await getDoc(tripDocRef);
+        if (snap.exists()) {
+          const data = snap.data();
+          if (Array.isArray(data.itinerary)) {
+            itinerary = data.itinerary;
+          }
+          if (data.expenseDetails && typeof data.expenseDetails === "object") {
+            expenseDetails = data.expenseDetails;
+          } else {
+            expenseDetails = {};
+          }
+          renderItinerary();
+          updateBudgetSummary();
+          updateMap();
+          console.log("已從 Firestore 載入行程資料");
+        } else {
+          // 第一次使用：將預設行程寫入雲端
+          await setDoc(tripDocRef, {
+            itinerary,
+            expenseDetails
+          });
+          console.log("雲端尚無資料，已建立預設行程");
+        }
+      } catch (e) {
+        console.error("載入雲端資料失敗：", e);
+      }
+    }
+
+    async function saveStateToCloud() {
+      try {
+        const data = { itinerary, expenseDetails };
+        await setDoc(tripDocRef, data);
+        // console.log("已同步至 Firestore");
+      } catch (e) {
+        console.warn("儲存到雲端失敗：", e);
+      }
+    }
+
+    // 保留原本 saveState() 呼叫點，改成寫 Firestore
+    function saveState() {
+      // 不等待，背景同步
+      saveStateToCloud();
+    }
+
+    // 監聽：別人修改 Firestore 時，本機即時更新
+    onSnapshot(tripDocRef, (snap) => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      // 這裡直接覆蓋，目前不做「差異比較」，簡單可靠
+      if (Array.isArray(data.itinerary)) {
+        itinerary = data.itinerary;
+      }
+      if (data.expenseDetails && typeof data.expenseDetails === "object") {
+        expenseDetails = data.expenseDetails;
+      } else {
+        expenseDetails = {};
+      }
+      renderItinerary();
+      updateBudgetSummary();
+      updateMap();
+      // console.log("收到 Firestore 即時更新");
+    });
+
+    // === DOM ===
     const itineraryListEl = document.getElementById("itineraryList");
     const totalRangeEl = document.getElementById("totalRange");
     const dailyRangeEl = document.getElementById("dailyRange");
+    const actualTotalEl = document.getElementById("actualTotal");
     const restaurantListEl = document.getElementById("restaurantList");
     const resetOrderBtn = document.getElementById("resetOrderBtn");
 
-    // === Leaflet 地圖設定 ===
+    const expenseOverlayEl = document.getElementById("expenseOverlay");
+    const expenseTitleMainEl = document.getElementById("expenseTitleMain");
+    const expenseTitleSubEl = document.getElementById("expenseTitleSub");
+    const expenseTableBodyEl = document.getElementById("expenseTableBody");
+    const expenseTotalAEl = document.getElementById("expenseTotalA");
+    const expenseTotalBEl = document.getElementById("expenseTotalB");
+    const expenseTotalBothEl = document.getElementById("expenseTotalBoth");
+    const expenseAddRowBtn = document.getElementById("expenseAddRowBtn");
+    const expenseSaveBtn = document.getElementById("expenseSaveBtn");
+    const expenseCloseBtn = document.getElementById("expenseCloseBtn");
+
+    let currentExpenseDayId = null;
+
+    // === 地圖 ===
     const map = L.map("map", {
       zoomControl: false
     }).setView([36.7, 138.9], 6);
@@ -985,9 +1325,7 @@
     }).addTo(map);
 
     L.control
-      .zoom({
-        position: "bottomright"
-      })
+      .zoom({ position: "bottomright" })
       .addTo(map);
 
     let markerGroup = L.layerGroup().addTo(map);
@@ -1041,9 +1379,7 @@
           weight: 3,
           opacity: 0.75
         }).addTo(map);
-        map.fitBounds(routeLine.getBounds(), {
-          padding: [20, 20]
-        });
+        map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
       }
     }
 
@@ -1056,11 +1392,16 @@
         card.setAttribute("draggable", "true");
         card.dataset.id = day.id;
 
+        const actualValue = day.actualCost != null ? day.actualCost : "";
+
         card.innerHTML = `
           <div class="day-header">
             <div>
               <div class="day-label">${day.label}</div>
-              <div class="day-main-title">${day.title}</div>
+              <div class="day-main-title"
+                   contenteditable="true"
+                   data-edit="title"
+                   data-day-id="${day.id}">${day.title}</div>
             </div>
             <div class="day-region-pill">
               <span style="width:7px;height:7px;border-radius:999px;background:${
@@ -1070,9 +1411,19 @@
             </div>
           </div>
           <div class="day-body">
-            <p>${day.description}</p>
+            <p contenteditable="true"
+               data-edit="description"
+               data-day-id="${day.id}">${day.description}</p>
             <ul>
-              ${day.bullets.map((b) => `<li>${b}</li>`).join("")}
+              ${day.bullets
+                .map(
+                  (b, idx) =>
+                    `<li contenteditable="true"
+                         data-edit="bullet"
+                         data-day-id="${day.id}"
+                         data-bullet-index="${idx}">${b}</li>`
+                )
+                .join("")}
             </ul>
             <div class="day-tags">
               ${day.tags.map((t) => `<span class="day-tag"># ${t}</span>`).join("")}
@@ -1081,11 +1432,34 @@
               估計花費：<strong>${day.budget.min.toLocaleString()}〜${day.budget.max.toLocaleString()} JPY</strong><br/>
               <span>${day.budget.note}</span>
             </div>
+            <div class="day-actual">
+              <label>
+                實際花費：
+                <input type="number"
+                       min="0"
+                       step="100"
+                       placeholder="0"
+                       data-day-id="${day.id}"
+                       value="${actualValue}"
+                       readonly>
+              </label>
+              <span class="day-actual-note">單位：JPY，由「明細記帳」自動加總 Lok / Wai 後帶入。</span>
+              <button type="button" class="detail-btn" data-day-id="${day.id}">
+                明細記帳
+              </button>
+            </div>
           </div>
         `;
 
-        // 點選卡片時，地圖聚焦
-        card.addEventListener("click", () => {
+        // 點卡片 -> 地圖聚焦（避免在輸入/按鈕上觸發）
+        card.addEventListener("click", (e) => {
+          const tagName = e.target.tagName.toLowerCase();
+          const isEditable =
+            e.target.hasAttribute("contenteditable") ||
+            tagName === "input" ||
+            tagName === "textarea" ||
+            tagName === "button";
+          if (isEditable) return;
           updateMap(day.id);
         });
 
@@ -1129,9 +1503,19 @@
           renderItinerary();
           updateBudgetSummary();
           updateMap();
+          saveState();
         });
 
         itineraryListEl.appendChild(card);
+      });
+
+      // 明細記帳按鈕
+      document.querySelectorAll(".detail-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const dayId = parseInt(btn.dataset.dayId, 10);
+          openExpensePanel(dayId);
+        });
       });
     }
 
@@ -1141,9 +1525,10 @@
         (acc, day) => {
           acc.min += day.budget.min;
           acc.max += day.budget.max;
+          acc.actual += day.actualCost != null ? day.actualCost : 0;
           return acc;
         },
-        { min: 0, max: 0 }
+        { min: 0, max: 0, actual: 0 }
       );
 
       const days = itinerary.length || 1;
@@ -1154,6 +1539,12 @@
         totals.min.toLocaleString() + "〜" + totals.max.toLocaleString();
       dailyRangeEl.textContent =
         minPerDay.toLocaleString() + "〜" + maxPerDay.toLocaleString() + " / 日";
+
+      if (totals.actual > 0) {
+        actualTotalEl.textContent = totals.actual.toLocaleString() + " JPY";
+      } else {
+        actualTotalEl.textContent = "尚未填寫";
+      }
     }
 
     // === 餐廳渲染 ===
@@ -1180,18 +1571,234 @@
       });
     }
 
+    // === 文字編輯（不含實際花費，實際花費只能由明細面板更新） ===
+    itineraryListEl.addEventListener("input", (e) => {
+      const target = e.target;
+      const editType = target.dataset.edit;
+      const dayId = parseInt(target.dataset.dayId, 10);
+      if (!editType || !dayId) return;
+
+      const day = itinerary.find((d) => d.id === dayId);
+      if (!day) return;
+
+      if (editType === "title") {
+        day.title = target.textContent.trim();
+      } else if (editType === "description") {
+        day.description = target.textContent.trim();
+      } else if (editType === "bullet") {
+        const idx = parseInt(target.dataset.bulletIndex, 10);
+        if (!Number.isNaN(idx)) {
+          day.bullets[idx] = target.textContent.trim();
+        }
+      }
+      saveState();
+    });
+
+    // === 記帳分頁 ===
+    function openExpensePanel(dayId) {
+      currentExpenseDayId = dayId;
+      const day = itinerary.find((d) => d.id === dayId);
+      if (!day) return;
+
+      expenseTitleMainEl.textContent = `${day.label} · ${day.title}`;
+      expenseTitleSubEl.textContent = `${day.region} · 可記錄 Lok / Wai 的明細及金額`;
+
+      let items = expenseDetails[dayId];
+      if (!Array.isArray(items)) {
+        items = [];
+        expenseDetails[dayId] = items; // 確保之後都使用同一個陣列
+      }
+      renderExpenseTable(items);
+
+      expenseOverlayEl.classList.remove("hidden");
+    }
+
+    function closeExpensePanel() {
+      expenseOverlayEl.classList.add("hidden");
+      currentExpenseDayId = null;
+    }
+
+    function renderExpenseTable(items) {
+      expenseTableBodyEl.innerHTML = "";
+
+      if (!items.length) {
+        items.push({ desc: "", a: "", b: "" });
+      }
+
+      items.forEach((item, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <input type="text" placeholder="例如：晚餐、JR 車票、滑雪裝備租借"
+                   data-expense-field="desc" data-row-index="${index}"
+                   value="${item.desc || ""}">
+          </td>
+          <td>
+            <input type="number" min="0" step="10" placeholder="0"
+                   data-expense-field="a" data-row-index="${index}"
+                   value="${item.a !== "" && item.a != null ? item.a : ""}">
+          </td>
+          <td>
+            <input type="number" min="0" step="10" placeholder="0"
+                   data-expense-field="b" data-row-index="${index}"
+                   value="${item.b !== "" && item.b != null ? item.b : ""}">
+          </td>
+          <td data-expense-sum data-row-index="${index}"></td>
+          <td style="text-align:center;">
+            <button type="button"
+                    class="expense-remove-row-btn"
+                    data-row-index="${index}">刪除</button>
+          </td>
+        `;
+        expenseTableBodyEl.appendChild(tr);
+      });
+
+      updateExpenseTotals(items);
+      bindExpenseTableEvents(items);
+    }
+
+    function bindExpenseTableEvents(items) {
+      expenseTableBodyEl.querySelectorAll("input[data-expense-field]").forEach((input) => {
+        input.addEventListener("input", () => {
+          const idx = parseInt(input.dataset.rowIndex, 10);
+          const field = input.dataset.expenseField;
+          if (!Number.isFinite(idx)) return;
+
+          if (field === "desc") {
+            items[idx].desc = input.value;
+          } else if (field === "a" || field === "b") {
+            const v = parseFloat(input.value);
+            items[idx][field] = Number.isFinite(v) ? v : "";
+          }
+          updateExpenseTotals(items);
+        });
+      });
+
+      expenseTableBodyEl.querySelectorAll(".expense-remove-row-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.dataset.rowIndex, 10);
+          if (!Number.isFinite(idx)) return;
+          items.splice(idx, 1);
+          renderExpenseTable(items);
+        });
+      });
+    }
+
+    function updateExpenseTotals(items) {
+      let totalA = 0;
+      let totalB = 0;
+
+      items.forEach((item, idx) => {
+        const a = typeof item.a === "number" ? item.a : parseFloat(item.a);
+        const b = typeof item.b === "number" ? item.b : parseFloat(item.b);
+        const validA = Number.isFinite(a) ? a : 0;
+        const validB = Number.isFinite(b) ? b : 0;
+        const sum = validA + validB;
+
+        totalA += validA;
+        totalB += validB;
+
+        const sumCell = expenseTableBodyEl.querySelector(
+          `td[data-expense-sum][data-row-index="${idx}"]`
+        );
+        if (sumCell) {
+          sumCell.textContent = sum > 0 ? sum.toLocaleString() : "";
+        }
+      });
+
+      const both = totalA + totalB;
+
+      expenseTotalAEl.textContent = `Lok：${totalA.toLocaleString()} JPY`;
+      expenseTotalBEl.textContent = `Wai：${totalB.toLocaleString()} JPY`;
+      expenseTotalBothEl.textContent = `兩人合計：${both.toLocaleString()} JPY`;
+    }
+
+    // 新增一列明細
+    expenseAddRowBtn.addEventListener("click", () => {
+      if (currentExpenseDayId == null) return;
+      let items = expenseDetails[currentExpenseDayId];
+      if (!Array.isArray(items)) {
+        items = [];
+        expenseDetails[currentExpenseDayId] = items;
+      }
+      items.push({ desc: "", a: "", b: "" });
+      renderExpenseTable(items);
+    });
+
+    // 儲存並關閉：寫回 expenseDetails + 更新該日 actualCost + 儲存到 Firestore
+    expenseSaveBtn.addEventListener("click", () => {
+      if (currentExpenseDayId == null) {
+        closeExpensePanel();
+        return;
+      }
+
+      const rows = Array.from(expenseTableBodyEl.querySelectorAll("tr"));
+      const items = rows
+        .map((tr) => {
+          const descInput = tr.querySelector('input[data-expense-field="desc"]');
+          const aInput = tr.querySelector('input[data-expense-field="a"]');
+          const bInput = tr.querySelector('input[data-expense-field="b"]');
+          const desc = descInput ? descInput.value.trim() : "";
+          const aVal = aInput ? parseFloat(aInput.value) : NaN;
+          const bVal = bInput ? parseFloat(bInput.value) : NaN;
+          return {
+            desc,
+            a: Number.isFinite(aVal) ? aVal : "",
+            b: Number.isFinite(bVal) ? bVal : ""
+          };
+        })
+        .filter((item) => item.desc !== "" || item.a !== "" || item.b !== "");
+
+      expenseDetails[currentExpenseDayId] = items;
+
+      let totalA = 0;
+      let totalB = 0;
+      items.forEach((item) => {
+        const a = typeof item.a === "number" ? item.a : parseFloat(item.a);
+        const b = typeof item.b === "number" ? item.b : parseFloat(item.b);
+        if (Number.isFinite(a)) totalA += a;
+        if (Number.isFinite(b)) totalB += b;
+      });
+      const both = totalA + totalB;
+
+      const day = itinerary.find((d) => d.id === currentExpenseDayId);
+      if (day) {
+        day.actualCost = both > 0 ? both : null;
+      }
+
+      renderItinerary();
+      updateBudgetSummary();
+      updateMap();
+      saveState();
+      closeExpensePanel();
+    });
+
+    expenseCloseBtn.addEventListener("click", () => {
+      closeExpensePanel();
+    });
+
+    expenseOverlayEl.addEventListener("click", (e) => {
+      if (e.target === expenseOverlayEl) {
+        closeExpensePanel();
+      }
+    });
+
     // === 初始化 ===
     renderItinerary();
     updateBudgetSummary();
     renderRestaurants();
     updateMap();
+    // 從 Firestore 載入實際資料（如已存在）
+    loadFromCloud();
 
-    // 重置排序按鈕
+    // 重置：回到預設行程，清除所有明細並覆蓋雲端資料
     resetOrderBtn.addEventListener("click", () => {
       itinerary = JSON.parse(JSON.stringify(initialItinerary));
+      expenseDetails = {};
       renderItinerary();
       updateBudgetSummary();
       updateMap();
+      saveState();
     });
   </script>
 
@@ -1209,7 +1816,7 @@
               url.searchParams.set('v', version);
               link.href = url.toString();
             } catch (e) {
-              // 忽略無法解析的 URL
+              // ignore
             }
           });
 
@@ -1221,7 +1828,7 @@
               url.searchParams.set('v', version);
               script.src = url.toString();
             } catch (e) {
-              // 忽略無法解析的 URL
+              // ignore
             }
           });
       });
