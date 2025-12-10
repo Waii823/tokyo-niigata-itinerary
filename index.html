@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <title>2026 日本東京 × 越後湯澤 × 新潟 9 天行程</title>
 
-  <!-- Google Fonts：中英優雅字體（加上 data-versioned 用來自動帶版本號） -->
+  <!-- Google Fonts -->
   <link data-versioned="true" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 
-  <!-- Leaflet Map（同樣加上 data-versioned） -->
+  <!-- Leaflet Map -->
   <link
     rel="stylesheet"
     data-versioned="true"
@@ -323,6 +323,46 @@
       margin-bottom: 2px;
     }
 
+    .day-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .day-bullet-dot {
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--gold-warm);
+      font-size: 12px;
+    }
+
+    .day-bullet-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .day-bullet-delete {
+      border-radius: 999px;
+      border: 1px solid rgba(220,80,80,0.6);
+      background: rgba(220,80,80,0.06);
+      color: #a33a3a;
+      font-size: 10px;
+      padding: 0 6px;
+      cursor: pointer;
+      line-height: 1.6;
+      flex-shrink: 0;
+      display: none; /* 預設隱藏 */
+    }
+
+    /* 編輯模式下才顯示 🗑 */
+    .day-card.edit-mode .day-bullet-delete {
+      display: inline-block;
+    }
+
+    .day-bullet-delete:hover {
+      background: rgba(220,80,80,0.12);
+    }
+
     .day-tags {
       display: flex;
       flex-wrap: wrap;
@@ -413,6 +453,65 @@
       transform: translateY(-1px);
       box-shadow: 0 8px 20px rgba(120, 80, 30, 0.28);
       background: linear-gradient(135deg, #fff4dd, #ead0aa);
+    }
+
+    /* 新增行程（只在編輯模式出現） */
+    .day-add-bullet {
+      margin: 6px 0 2px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(201,163,107,0.8);
+      background: linear-gradient(135deg, #fffaf2, #f0e0c6);
+      padding: 3px 10px;
+      font-size: 11px;
+      color: #6a4a21;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 5px 12px rgba(120, 80, 30, 0.18);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        background var(--transition-fast);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .day-add-bullet:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(120, 80, 30, 0.28);
+      background: linear-gradient(135deg, #fff4dd, #ead0aa);
+    }
+
+    /* 修改行程 / 完成修改 按鈕 */
+    .day-edit-toggle,
+    .day-edit-finish {
+      margin-left: 8px;
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      cursor: pointer;
+      border-width: 1px;
+      border-style: solid;
+      background: transparent;
+    }
+
+    .day-edit-toggle {
+      border-color: rgba(58,82,110,0.4);
+      color: #2f3e57;
+      background: rgba(58,82,110,0.04);
+    }
+
+    .day-edit-toggle:hover {
+      background: rgba(58,82,110,0.09);
+    }
+
+    .day-edit-finish {
+      border-color: rgba(60,120,200,0.8);
+      color: #245d9b;
+      background: rgba(60,120,200,0.06);
+    }
+
+    .day-edit-finish:hover {
+      background: rgba(60,120,200,0.14);
     }
 
     #map {
@@ -830,13 +929,12 @@
               <span class="panel-title-dot"></span> 互動行程表（可拖拽排序 / 可編輯文字）
             </div>
             <div class="panel-subtitle">
-              拖曳每一天可以重新排程；直接點擊標題、說明、行<br />程項目可修改文字；可記錄兩人每日花費。
+              拖曳每一天可以重新排程；按「修改行程」進入編輯模式，才能修改標題 / 內容 / 行程項目。
             </div>
           </div>
           <div class="toolbar">
-            <span>提示：手機長按日卡拖曳<br />&emsp;&emsp;&emsp;桌機按住拖動</span>
             <button id="resetOrderBtn">
-              <span class="icon"></span> 回到建議排序<br />（會清除所有記錄）
+              <span class="icon"></span> 回到建議排序（會清除所有記錄）
             </button>
           </div>
         </div>
@@ -923,7 +1021,7 @@
     </div>
   </div>
 
-  <!-- Leaflet Script（加上 data-versioned 用 cache-busting） -->
+  <!-- Leaflet Script -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -931,9 +1029,8 @@
     data-versioned="true"
   ></script>
 
-  <!-- 主程式：改成 ES module，加入 Firebase Firestore 多人同步 -->
+  <!-- 主程式：ES module + Firebase Firestore -->
   <script type="module">
-    // === Firebase 初始化（使用 CDN 版本） ===
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
     import {
       getFirestore,
@@ -955,11 +1052,9 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
-    // 使用單一 document 存整份行程＋記帳資料
     const tripDocRef = doc(db, "trips", "tokyo-trip-2026");
 
-    // === 基礎行程資料 ===
+    // === 初始行程資料 ===
     const initialItinerary = [
       {
         id: 1,
@@ -1223,11 +1318,11 @@
       }
     ];
 
-    // === 狀態：行程 + 記帳明細 ===
     let itinerary = JSON.parse(JSON.stringify(initialItinerary));
-    let expenseDetails = {}; // { [dayId]: [{desc, a, b}] }
+    let expenseDetails = {};
+    // 哪些日卡在「編輯模式」
+    let editModeDays = new Set();
 
-    // === Firestore 同步：從雲端載入 / 儲存 / 監聽 ===
     async function loadFromCloud() {
       try {
         const snap = await getDoc(tripDocRef);
@@ -1244,14 +1339,8 @@
           renderItinerary();
           updateBudgetSummary();
           updateMap();
-          console.log("已從 Firestore 載入行程資料");
         } else {
-          // 第一次使用：將預設行程寫入雲端
-          await setDoc(tripDocRef, {
-            itinerary,
-            expenseDetails
-          });
-          console.log("雲端尚無資料，已建立預設行程");
+          await setDoc(tripDocRef, { itinerary, expenseDetails });
         }
       } catch (e) {
         console.error("載入雲端資料失敗：", e);
@@ -1260,25 +1349,20 @@
 
     async function saveStateToCloud() {
       try {
-        const data = { itinerary, expenseDetails };
-        await setDoc(tripDocRef, data);
-        // console.log("已同步至 Firestore");
+        await setDoc(tripDocRef, { itinerary, expenseDetails });
       } catch (e) {
         console.warn("儲存到雲端失敗：", e);
       }
     }
 
-    // 保留原本 saveState() 呼叫點，改成寫 Firestore
     function saveState() {
-      // 不等待，背景同步
       saveStateToCloud();
     }
 
-    // 監聽：別人修改 Firestore 時，本機即時更新
+    // Firestore 即時更新
     onSnapshot(tripDocRef, (snap) => {
       if (!snap.exists()) return;
       const data = snap.data();
-      // 這裡直接覆蓋，目前不做「差異比較」，簡單可靠
       if (Array.isArray(data.itinerary)) {
         itinerary = data.itinerary;
       }
@@ -1290,10 +1374,8 @@
       renderItinerary();
       updateBudgetSummary();
       updateMap();
-      // console.log("收到 Firestore 即時更新");
     });
 
-    // === DOM ===
     const itineraryListEl = document.getElementById("itineraryList");
     const totalRangeEl = document.getElementById("totalRange");
     const dailyRangeEl = document.getElementById("dailyRange");
@@ -1314,7 +1396,7 @@
 
     let currentExpenseDayId = null;
 
-    // === 地圖 ===
+    // 地圖
     const map = L.map("map", {
       zoomControl: false
     }).setView([36.7, 138.9], 6);
@@ -1324,9 +1406,7 @@
       attribution: "&copy; OpenStreetMap"
     }).addTo(map);
 
-    L.control
-      .zoom({ position: "bottomright" })
-      .addTo(map);
+    L.control.zoom({ position: "bottomright" }).addTo(map);
 
     let markerGroup = L.layerGroup().addTo(map);
     let routeLine = null;
@@ -1365,9 +1445,7 @@
             `<strong>${spot.name}</strong><br/><span style="font-size:11px;">${day.label} · ${day.title}</span>`
           );
 
-          if (isHighlight) {
-            marker.openPopup();
-          }
+          if (isHighlight) marker.openPopup();
 
           coords.push([spot.lat, spot.lng]);
         });
@@ -1383,7 +1461,6 @@
       }
     }
 
-    // === 行程渲染 ===
     function renderItinerary() {
       itineraryListEl.innerHTML = "";
       itinerary.forEach((day) => {
@@ -1394,12 +1471,20 @@
 
         const actualValue = day.actualCost != null ? day.actualCost : "";
 
+        const isEditMode = editModeDays.has(day.id);
+        if (isEditMode) {
+          card.classList.add("edit-mode");
+        }
+
+        const titleEditable = isEditMode ? "true" : "false";
+        const descEditable = isEditMode ? "true" : "false";
+
         card.innerHTML = `
           <div class="day-header">
             <div>
               <div class="day-label">${day.label}</div>
               <div class="day-main-title"
-                   contenteditable="true"
+                   contenteditable="${titleEditable}"
                    data-edit="title"
                    data-day-id="${day.id}">${day.title}</div>
             </div>
@@ -1411,20 +1496,48 @@
             </div>
           </div>
           <div class="day-body">
-            <p contenteditable="true"
+            <p contenteditable="${descEditable}"
                data-edit="description"
                data-day-id="${day.id}">${day.description}</p>
             <ul>
               ${day.bullets
                 .map(
                   (b, idx) =>
-                    `<li contenteditable="true"
-                         data-edit="bullet"
-                         data-day-id="${day.id}"
-                         data-bullet-index="${idx}">${b}</li>`
+                    `<li class="day-bullet" data-day-id="${day.id}" data-bullet-index="${idx}">
+                      <span class="day-bullet-dot">•</span>
+                      <span class="day-bullet-text"
+                            contenteditable="${isEditMode ? "true" : "false"}"
+                            data-edit="bullet"
+                            data-day-id="${day.id}"
+                            data-bullet-index="${idx}">${b}</span>
+                      <button type="button"
+                              class="day-bullet-delete"
+                              data-day-id="${day.id}"
+                              data-bullet-index="${idx}">🗑</button>
+                    </li>`
                 )
                 .join("")}
             </ul>
+            ${
+              isEditMode
+                ? `
+                  <button type="button" class="day-add-bullet" data-day-id="${day.id}">
+                    新增行程
+                  </button>
+                  <button type="button"
+                          class="day-edit-finish"
+                          data-day-id="${day.id}">
+                    完成修改
+                  </button>
+                `
+                : `
+                  <button type="button"
+                          class="day-edit-toggle"
+                          data-day-id="${day.id}">
+                    修改行程
+                  </button>
+                `
+            }
             <div class="day-tags">
               ${day.tags.map((t) => `<span class="day-tag"># ${t}</span>`).join("")}
             </div>
@@ -1451,7 +1564,7 @@
           </div>
         `;
 
-        // 點卡片 -> 地圖聚焦（避免在輸入/按鈕上觸發）
+        // 點卡片 → 地圖聚焦（排除編輯/按鈕）
         card.addEventListener("click", (e) => {
           const tagName = e.target.tagName.toLowerCase();
           const isEditable =
@@ -1463,7 +1576,7 @@
           updateMap(day.id);
         });
 
-        // Drag & Drop
+        // 拖曳排序
         card.addEventListener("dragstart", (e) => {
           card.classList.add("dragging");
           e.dataTransfer.effectAllowed = "move";
@@ -1506,6 +1619,42 @@
           saveState();
         });
 
+        // 修改行程 → 進入編輯模式
+        const editToggleBtn = card.querySelector(".day-edit-toggle");
+        if (editToggleBtn) {
+          editToggleBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            editModeDays.add(day.id);
+            renderItinerary();
+          });
+        }
+
+        // 新增行程（只有編輯模式有）
+        const addBulletBtn = card.querySelector(".day-add-bullet");
+        if (addBulletBtn) {
+          addBulletBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const id = parseInt(addBulletBtn.dataset.dayId, 10);
+            const d = itinerary.find((x) => x.id === id);
+            if (!d) return;
+            d.bullets.push("（在此輸入新行程項目）");
+            renderItinerary();
+            saveState();
+          });
+        }
+
+        // 完成修改：離開編輯模式並儲存
+        const finishBtn = card.querySelector(".day-edit-finish");
+        if (finishBtn) {
+          finishBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            // 雖然 focusout 已經會存，但這邊再強制存一次
+            saveState();
+            editModeDays.delete(day.id);
+            renderItinerary();
+          });
+        }
+
         itineraryListEl.appendChild(card);
       });
 
@@ -1519,7 +1668,22 @@
       });
     }
 
-    // === 預算計算 ===
+    // 刪除 bullet：事件委派（只有在編輯模式時看得到按鈕）
+    itineraryListEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".day-bullet-delete");
+      if (!btn) return;
+
+      e.stopPropagation();
+      const dayId = parseInt(btn.dataset.dayId, 10);
+      const idx = parseInt(btn.dataset.bulletIndex, 10);
+      const day = itinerary.find((d) => d.id === dayId);
+      if (!day || Number.isNaN(idx)) return;
+
+      day.bullets.splice(idx, 1);
+      renderItinerary();
+      saveState();
+    });
+
     function updateBudgetSummary() {
       const totals = itinerary.reduce(
         (acc, day) => {
@@ -1547,7 +1711,6 @@
       }
     }
 
-    // === 餐廳渲染 ===
     function renderRestaurants() {
       restaurantListEl.innerHTML = "";
       restaurants.forEach((r) => {
@@ -1571,30 +1734,34 @@
       });
     }
 
-    // === 文字編輯（不含實際花費，實際花費只能由明細面板更新） ===
-    itineraryListEl.addEventListener("input", (e) => {
-      const target = e.target;
-      const editType = target.dataset.edit;
-      const dayId = parseInt(target.dataset.dayId, 10);
-      if (!editType || !dayId) return;
+    // 編輯：focusout 時寫回資料（避免每打一個字就存，但仍保留自動存）
+    itineraryListEl.addEventListener(
+      "focusout",
+      (e) => {
+        const target = e.target;
+        const editType = target.dataset.edit;
+        const dayId = parseInt(target.dataset.dayId, 10);
+        if (!editType || !dayId) return;
 
-      const day = itinerary.find((d) => d.id === dayId);
-      if (!day) return;
+        const day = itinerary.find((d) => d.id === dayId);
+        if (!day) return;
 
-      if (editType === "title") {
-        day.title = target.textContent.trim();
-      } else if (editType === "description") {
-        day.description = target.textContent.trim();
-      } else if (editType === "bullet") {
-        const idx = parseInt(target.dataset.bulletIndex, 10);
-        if (!Number.isNaN(idx)) {
-          day.bullets[idx] = target.textContent.trim();
+        if (editType === "title") {
+          day.title = target.textContent.trim();
+        } else if (editType === "description") {
+          day.description = target.textContent.trim();
+        } else if (editType === "bullet") {
+          const idx = parseInt(target.dataset.bulletIndex, 10);
+          if (!Number.isNaN(idx)) {
+            day.bullets[idx] = target.textContent.trim();
+          }
         }
-      }
-      saveState();
-    });
+        saveState();
+      },
+      true
+    );
 
-    // === 記帳分頁 ===
+    // ===== 記帳面板 =====
     function openExpensePanel(dayId) {
       currentExpenseDayId = dayId;
       const day = itinerary.find((d) => d.id === dayId);
@@ -1606,7 +1773,7 @@
       let items = expenseDetails[dayId];
       if (!Array.isArray(items)) {
         items = [];
-        expenseDetails[dayId] = items; // 確保之後都使用同一個陣列
+        expenseDetails[dayId] = items;
       }
       renderExpenseTable(items);
 
@@ -1713,7 +1880,6 @@
       expenseTotalBothEl.textContent = `兩人合計：${both.toLocaleString()} JPY`;
     }
 
-    // 新增一列明細
     expenseAddRowBtn.addEventListener("click", () => {
       if (currentExpenseDayId == null) return;
       let items = expenseDetails[currentExpenseDayId];
@@ -1725,7 +1891,6 @@
       renderExpenseTable(items);
     });
 
-    // 儲存並關閉：寫回 expenseDetails + 更新該日 actualCost + 儲存到 Firestore
     expenseSaveBtn.addEventListener("click", () => {
       if (currentExpenseDayId == null) {
         closeExpensePanel();
@@ -1783,26 +1948,28 @@
       }
     });
 
-    // === 初始化 ===
-    renderItinerary();
-    updateBudgetSummary();
-    renderRestaurants();
-    updateMap();
-    // 從 Firestore 載入實際資料（如已存在）
-    loadFromCloud();
+    function renderRestaurantsAndInit() {
+      renderItinerary();
+      updateBudgetSummary();
+      renderRestaurants();
+      updateMap();
+      loadFromCloud();
+    }
 
-    // 重置：回到預設行程，清除所有明細並覆蓋雲端資料
     resetOrderBtn.addEventListener("click", () => {
       itinerary = JSON.parse(JSON.stringify(initialItinerary));
       expenseDetails = {};
+      editModeDays = new Set();
       renderItinerary();
       updateBudgetSummary();
       updateMap();
       saveState();
     });
+
+    renderRestaurantsAndInit();
   </script>
 
-  <!-- 🔄 自動版本編號（cache-buster）：針對 data-versioned="true" 的 <link> / <script> 加上 ?v=timestamp -->
+  <!-- cache-buster -->
   <script>
     (function () {
       const version = new Date().getTime();
@@ -1815,9 +1982,7 @@
               const url = new URL(link.href);
               url.searchParams.set('v', version);
               link.href = url.toString();
-            } catch (e) {
-              // ignore
-            }
+            } catch (e) {}
           });
 
         document
@@ -1827,9 +1992,7 @@
               const url = new URL(script.src);
               url.searchParams.set('v', version);
               script.src = url.toString();
-            } catch (e) {
-              // ignore
-            }
+            } catch (e) {}
           });
       });
     })();
