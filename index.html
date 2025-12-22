@@ -349,7 +349,7 @@
   <div class="page">
     <header>
       <div class="title-block">
-        <h1>大阪 × 京都 × 神戶｜8天冬季行程（多人同步版）</h1>
+        <h1>大阪 × 京都 × 神戶｜8天冬季與陸少XD同行行程</h1>
         <div class="subtitle">
           2026/1/24 13:00 抵達關西國際機場 · 2026/1/31 20:15 自關西返程<br />
           市區 × 郊區：大阪（USJ/溫泉/購物）＋ 京都（嵐山/清水寺）＋ 神戶（港灣夜景）
@@ -608,6 +608,8 @@
     let isEditMode = false;
     let isApplyingRemote = false;
     let debounceTimer = null;
+    let itineraryDirty = false;          // 行程/排序/天數變更：只在「完成修改」才同步
+    let pendingRemoteData = null;        // 編輯中收到遠端更新，先暫存，避免打斷輸入
 
     /***********************
      * 4) UI 元件
@@ -633,6 +635,12 @@
       syncText.textContent = text || "—";
     }
 
+    // 行程編輯中：先只改本地，不要觸發雲端同步（避免遠端同步導致重繪打斷輸入）
+    function markItineraryDirty(){
+      itineraryDirty = true;
+      setSyncState("busy", "編輯中（未同步）");
+    }
+
     /***********************
      * 5) 計算每日實際花費（不可手動改）
      ***********************/
@@ -647,6 +655,15 @@
       return v.toLocaleString("ja-JP");
     }
 
+    // 編輯模式下避免整個重繪行程（會打斷輸入），只更新每一天的「實際花費」顯示
+    function updateCostDisplay(){
+      const els = document.querySelectorAll('.cost-val[data-daykey]');
+      els.forEach(el => {
+        const dk = el.getAttribute('data-daykey');
+        el.textContent = formatJPY(getDayTotal(dk));
+      });
+    }
+
     /***********************
      * 6) Render 行程
      ***********************/
@@ -658,6 +675,7 @@
         card.className = "day-card";
         card.draggable = !isEditMode;
         card.dataset.index = String(idx);
+        card.dataset.dayKey = day.dayKey;
 
         // Drag events
         card.addEventListener("dragstart", (e) => {
@@ -721,7 +739,7 @@
             refreshExpenseDaySelect();
             renderItinerary();
             renderExpenses();
-            scheduleSave();
+            markItineraryDirty();
           });
           actions.appendChild(delBtn);
         }
@@ -760,7 +778,7 @@
           inDate.addEventListener("input", () => {
             day.dateLabel = inDate.value;
             refreshExpenseDaySelect();
-            scheduleSave();
+            markItineraryDirty();
           });
           f1.appendChild(inDate);
 
@@ -772,7 +790,7 @@
           inTitle.value = day.title;
           inTitle.addEventListener("input", () => {
             day.title = inTitle.value;
-            scheduleSave();
+            markItineraryDirty();
           });
           f2.appendChild(inTitle);
 
@@ -783,7 +801,7 @@
           ta.value = day.items.join("\n");
           ta.addEventListener("input", () => {
             day.items = ta.value.split("\n").map(s => s.trim()).filter(Boolean);
-            scheduleSave();
+            markItineraryDirty();
           });
           f3.appendChild(ta);
 
@@ -799,7 +817,7 @@
         const total = getDayTotal(day.dayKey);
         costRow.innerHTML = `
           <div>實際花費（JPY）</div>
-          <div class="cost-val">${formatJPY(total)}</div>
+          <div class="cost-val" data-daykey="${day.dayKey}">${formatJPY(total)}</div>
         `;
         body.appendChild(costRow);
 
@@ -868,8 +886,12 @@
           if(!confirm("刪除這筆明細？")) return;
           expenseDetails = expenseDetails.filter(e => e.id !== x.id);
           renderExpenses();
-          renderItinerary(); // 讓每日合計更新
-          scheduleSave();
+          if(isEditMode){
+            updateCostDisplay();
+          }else{
+            renderItinerary();
+          }
+          scheduleSave({ allowDuringEdit: true });
         });
         tdBtn.appendChild(del);
 
@@ -895,8 +917,12 @@
       expAmount.value = "";
 
       renderExpenses();
-      renderItinerary();
-      scheduleSave();
+      if(isEditMode){
+        updateCostDisplay();
+      }else{
+        renderItinerary();
+      }
+      scheduleSave({ allowDuringEdit: true });
     }
 
     addExpenseBtn.addEventListener("click", addExpense);
@@ -907,13 +933,42 @@
     /***********************
      * 8) 編輯模式 / 重置排序
      ***********************/
-    editModeBtn.addEventListener("click", () => {
+    editModeBtn.addEventListener("click", async () => {
+      // 進入/離開編輯模式
       isEditMode = !isEditMode;
       editModeBtn.classList.toggle("btn-primary", !isEditMode);
       editModeBtn.classList.toggle("btn-ok", isEditMode);
       editModeBtn.innerHTML = isEditMode
         ? `<span class="icon i-save"></span> 完成修改`
         : `<span class="icon i-edit"></span> 修改行程`;
+
+      if(isEditMode){
+        // 進入編輯：暫停套用遠端更新，避免輸入中被重繪打斷
+        setSyncState("busy", "編輯中（暫停同步）");
+        renderItinerary();
+        return;
+      }
+
+      // 離開編輯：
+      // 1) 若使用者有改行程，才在此刻把行程變更寫到雲端
+      if(itineraryDirty){
+        await saveStateToCloud(false);
+        itineraryDirty = false;
+        pendingRemoteData = null; // 以本地為準，清掉暫存遠端
+      }else if(pendingRemoteData){
+        // 2) 使用者沒有改行程，但編輯期間有人改了：離開編輯後再套用
+        isApplyingRemote = true;
+        try{
+          if(Array.isArray(pendingRemoteData.itinerary)) itinerary = pendingRemoteData.itinerary;
+          if(Array.isArray(pendingRemoteData.expenseDetails)) expenseDetails = pendingRemoteData.expenseDetails;
+        }finally{
+          isApplyingRemote = false;
+          pendingRemoteData = null;
+        }
+      }
+
+      refreshExpenseDaySelect();
+      renderExpenses();
       renderItinerary();
     });
 
@@ -950,9 +1005,15 @@
       }
     }
 
-    function scheduleSave(){
+    function scheduleSave({ allowDuringEdit = false } = {}){
       // 避免自己套用遠端更新時又寫回去造成循環
       if(isApplyingRemote) return;
+
+      // 編輯行程中：不自動同步（避免遠端快照觸發重繪，打斷輸入）
+      if(isEditMode && !allowDuringEdit){
+        markItineraryDirty();
+        return;
+      }
 
       setSyncState("busy", "同步中…");
       clearTimeout(debounceTimer);
@@ -977,6 +1038,14 @@
       onSnapshot(tripDocRef, (snap) => {
         if(!snap.exists()) return;
         const data = snap.data() || {};
+
+        // 你正在輸入（編輯模式）時，先不要套用遠端更新，避免整頁重繪打斷輸入
+        if(isEditMode){
+          pendingRemoteData = data;
+          setSyncState("busy", "編輯中（遠端更新已暫存）");
+          return;
+        }
+
         // 遠端更新 → 套用到本地
         isApplyingRemote = true;
         try{
