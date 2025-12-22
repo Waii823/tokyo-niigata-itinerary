@@ -1,926 +1,363 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <title>2026 日本東京 × 越後湯澤 × 新潟 9 天行程</title>
-
-  <!-- Google Fonts -->
-  <link data-versioned="true" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
-
-  <!-- Leaflet Map -->
-  <link
-    rel="stylesheet"
-    data-versioned="true"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>大阪 × 京都 × 神戶｜8天行程（可同步）</title>
   <style>
-    :root {
-      --bg-ivory: #f7f3ec;
-      --bg-panel: #ffffff;
-      --blue-fog: #d4dde9;
-      --blue-deep: #3a526e;
-      --gold-warm: #c9a36b;
-      --gold-soft: #e1c79a;
-      --text-main: #2f3640;
-      --text-muted: #7b8088;
-      --border-soft: rgba(58, 82, 110, 0.08);
-      --shadow-soft: 0 14px 35px rgba(20, 33, 61, 0.12);
-      --radius-xl: 24px;
-      --radius-lg: 18px;
-      --transition-fast: 0.18s ease-out;
-      --transition-med: 0.28s ease;
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --card2:#0f1730;
+      --muted:#a7b1c2;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.10);
+      --accent:#7aa6ff;
+      --accent2:#74f0c5;
+      --danger:#ff6b6b;
+      --warn:#ffd166;
+      --ok:#74f0c5;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans TC", Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: radial-gradient(1200px 500px at 20% -10%, rgba(122,166,255,.25), transparent 60%),
+                  radial-gradient(1000px 500px at 80% 0%, rgba(116,240,197,.18), transparent 60%),
+                  var(--bg);
+      color:var(--text);
     }
-
-    body {
-      font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #e6edf7 0, #f7f3ec 45%, #f8f4ef 100%);
-      color: var(--text-main);
-      line-height: 1.6;
-      padding: 24px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .page {
-      max-width: 1280px;
+    a{color:inherit}
+    .page{
+      max-width: 1160px;
       margin: 0 auto;
-      background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(244,247,252,0.96));
-      border-radius: 32px;
-      box-shadow: 0 28px 80px rgba(20, 33, 61, 0.18);
-      padding: 28px 32px 32px;
-      position: relative;
-      overflow: hidden;
+      padding: 20px 16px 36px;
     }
-
-    .page::before,
-    .page::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      filter: blur(40px);
-      opacity: 0.55;
-      pointer-events: none;
+    header{
+      padding: 18px 14px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
     }
-
-    .page::before {
-      width: 260px;
-      height: 260px;
-      background: radial-gradient(circle, rgba(212,221,233,0.9), transparent 70%);
-      top: -60px;
-      right: -40px;
+    .title-block h1{
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: .3px;
     }
-
-    .page::after {
-      width: 240px;
-      height: 240px;
-      background: radial-gradient(circle, rgba(201,163,107,0.6), transparent 70%);
-      bottom: -80px;
-      left: -40px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .title-block {
-      flex: 2;
-    }
-
-    h1 {
-      font-family: "Playfair Display", "Noto Sans TC", serif;
-      font-size: 28px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--blue-deep);
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      font-size: 15px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-    }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    .subtitle{
+      color: var(--muted);
       font-size: 13px;
-      color: var(--text-muted);
+      line-height: 1.55;
     }
 
-    .meta-pill {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(58, 82, 110, 0.06);
-      border: 1px solid rgba(58, 82, 110, 0.08);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns: 1.3fr .9fr;
+      margin-top: 14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
     }
 
-    .meta-pill span.icon {
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #fefefe, var(--blue-deep));
-      display: inline-block;
+    .panel{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.03);
+      box-shadow: var(--shadow);
+      overflow:hidden;
     }
-
-    .budget-summary {
-      flex: 1.2;
-      background: linear-gradient(150deg, rgba(58,82,110,0.95), #1f2b3c);
-      border-radius: 24px;
-      padding: 14px 16px 16px;
-      color: #fdfdfd;
-      box-shadow: 0 18px 45px rgba(10,20,40,0.65);
-      position: relative;
-      overflow: hidden;
+    .panel-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding: 14px 14px 10px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
     }
-
-    .budget-summary::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top right, rgba(255,255,255,0.18), transparent 55%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .budget-summary h2 {
-      font-size: 15px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      opacity: 0.95;
-    }
-
-    .budget-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      margin-bottom: 4px;
-      opacity: 0.9;
-    }
-
-    .budget-em {
-      font-size: 21px;
-      font-weight: 600;
-      color: #ffe9bf;
-      letter-spacing: 0.02em;
-    }
-
-    .budget-note {
-      margin-top: 8px;
-      font-size: 11px;
-      opacity: 0.8;
-    }
-
-    main {
-      display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
-      gap: 16px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .panel {
-      border-radius: var(--radius-xl);
-      background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.9);
-      box-shadow: 0 18px 40px rgba(8, 16, 32, 0.08);
-      padding: 14px 14px 16px;
-      position: relative;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--border-soft);
-    }
-
-    .panel-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--blue-deep);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .panel-title-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #fffef8, var(--gold-warm));
-    }
-
-    .panel-subtitle {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .itinerary-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .day-card {
-      background: linear-gradient(135deg, #ffffff, #f5f6fb);
-      border-radius: var(--radius-lg);
-      padding: 10px 12px;
-      border: 1px solid rgba(201,163,107,0.25);
-      box-shadow: 0 10px 28px rgba(33, 42, 63, 0.08);
-      cursor: grab;
-      position: relative;
-      transition: transform var(--transition-fast),
-        box-shadow var(--transition-fast), border-color var(--transition-fast),
-        background var(--transition-fast);
-    }
-
-    .day-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 32px rgba(24, 36, 64, 0.16);
-      border-color: rgba(201,163,107,0.65);
-    }
-
-    .day-card.dragging {
-      opacity: 0.7;
-      cursor: grabbing;
-      transform: scale(0.99);
-      box-shadow: 0 16px 40px rgba(10,16,30,0.32);
-    }
-
-    .day-card.drag-over {
-      outline: 1px dashed rgba(58,82,110,0.55);
-      outline-offset: -4px;
-    }
-
-    .day-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 4px;
-      align-items: baseline;
-    }
-
-    .day-label {
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold-warm);
-      font-weight: 600;
-    }
-
-    .day-main-title {
+    .panel-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight: 700;
       font-size: 14px;
-      font-weight: 600;
-      color: var(--blue-deep);
     }
-
-    .day-region-pill {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(58,82,110,0.06);
-      color: var(--text-muted);
-      border: 1px solid rgba(58,82,110,0.12);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+    .panel-title-dot{
+      width:10px;height:10px;border-radius:99px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 3px rgba(122,166,255,.15);
+      flex:0 0 auto;
     }
-
-    .day-body {
+    .panel-subtitle{
+      margin-top:6px;
+      color: var(--muted);
       font-size: 12px;
-      color: var(--text-main);
+      line-height: 1.55;
+      max-width: 720px;
+    }
+    .toolbar{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
-    .day-body ul {
-      margin-left: 16px;
-      margin-top: 4px;
-    }
-
-    .day-body li {
-      margin-bottom: 2px;
-    }
-
-    .day-bullet {
-      display: flex;
-      align-items: flex-start;
-      gap: 4px;
-    }
-
-    .day-bullet-dot {
-      flex-shrink: 0;
-      margin-top: 2px;
-      color: var(--gold-warm);
+    button{
+      appearance:none;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding: 9px 10px;
+      border-radius: 12px;
+      cursor:pointer;
       font-size: 12px;
+      transition: .15s;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    button:hover{transform: translateY(-1px); background: rgba(255,255,255,.08);}
+    button:active{transform: translateY(0px);}
+    .btn-primary{
+      border-color: rgba(122,166,255,.35);
+      background: rgba(122,166,255,.14);
+    }
+    .btn-danger{
+      border-color: rgba(255,107,107,.35);
+      background: rgba(255,107,107,.10);
+      color: #ffdede;
+    }
+    .btn-ok{
+      border-color: rgba(116,240,197,.35);
+      background: rgba(116,240,197,.10);
     }
 
-    .day-bullet-text {
-      flex: 1;
+    .itinerary-list{
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .day-card{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(17,26,46,.68);
+      overflow:hidden;
+    }
+    .day-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px 12px 10px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+    .day-left{
       min-width: 0;
     }
-
-    .day-bullet-delete {
-      border-radius: 999px;
-      border: 1px solid rgba(220,80,80,0.6);
-      background: rgba(220,80,80,0.06);
-      color: #a33a3a;
-      font-size: 10px;
-      padding: 0 6px;
-      cursor: pointer;
-      line-height: 1.6;
-      flex-shrink: 0;
-      display: none; /* 預設隱藏 */
-    }
-
-    /* 編輯模式下才顯示 🗑 */
-    .day-card.edit-mode .day-bullet-delete {
-      display: inline-block;
-    }
-
-    .day-bullet-delete:hover {
-      background: rgba(220,80,80,0.12);
-    }
-
-    .day-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .day-tag {
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(201,163,107,0.08);
-      color: #694b23;
-    }
-
-    .day-budget {
-      margin-top: 4px;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .day-actual {
-      margin-top: 6px;
-      padding-top: 4px;
-      border-top: 1px dashed rgba(58,82,110,0.12);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .day-actual label {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-weight: 500;
-      color: var(--blue-deep);
-    }
-
-    .day-actual input {
-      width: 110px;
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(58,82,110,0.25);
-      font-size: 11px;
-      text-align: right;
-      outline: none;
-      background: rgba(255,255,255,0.9);
-    }
-
-    .day-actual input[readonly] {
-      background: rgba(245,246,250,0.9);
-      cursor: default;
-    }
-
-    .day-actual input:focus {
-      border-color: var(--gold-warm);
-      box-shadow: 0 0 0 1px rgba(201,163,107,0.32);
-      background: #fffdf8;
-    }
-
-    .day-actual-note {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    .day-actual button.detail-btn {
-      margin-left: auto;
-      border-radius: 999px;
-      border: 1px solid rgba(201,163,107,0.8);
-      background: linear-gradient(135deg, #fffaf2, #f0e0c6);
-      padding: 3px 10px;
-      font-size: 11px;
-      color: #6a4a21;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 5px 12px rgba(120, 80, 30, 0.18);
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-        background var(--transition-fast);
-      white-space: nowrap;
-    }
-
-    .day-actual button.detail-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(120, 80, 30, 0.28);
-      background: linear-gradient(135deg, #fff4dd, #ead0aa);
-    }
-
-    /* 新增行程（只在編輯模式出現） */
-    .day-add-bullet {
-      margin: 6px 0 2px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(201,163,107,0.8);
-      background: linear-gradient(135deg, #fffaf2, #f0e0c6);
-      padding: 3px 10px;
-      font-size: 11px;
-      color: #6a4a21;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 5px 12px rgba(120, 80, 30, 0.18);
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-        background var(--transition-fast);
-      white-space: nowrap;
-      text-decoration: none;
-    }
-
-    .day-add-bullet:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(120, 80, 30, 0.28);
-      background: linear-gradient(135deg, #fff4dd, #ead0aa);
-    }
-
-    /* 修改行程 / 完成修改 按鈕 */
-    .day-edit-toggle,
-    .day-edit-finish {
-      margin-left: 8px;
-      font-size: 11px;
-      border-radius: 999px;
-      padding: 3px 10px;
-      cursor: pointer;
-      border-width: 1px;
-      border-style: solid;
-      background: transparent;
-    }
-
-    .day-edit-toggle {
-      border-color: rgba(58,82,110,0.4);
-      color: #2f3e57;
-      background: rgba(58,82,110,0.04);
-    }
-
-    .day-edit-toggle:hover {
-      background: rgba(58,82,110,0.09);
-    }
-
-    .day-edit-finish {
-      border-color: rgba(60,120,200,0.8);
-      color: #245d9b;
-      background: rgba(60,120,200,0.06);
-    }
-
-    .day-edit-finish:hover {
-      background: rgba(60,120,200,0.14);
-    }
-
-    #map {
-      width: 100%;
-      height: 260px;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(58,82,110,0.15);
-      box-shadow: 0 14px 35px rgba(10, 25, 50, 0.18);
-    }
-
-    .map-legend {
-      margin-top: 8px;
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .map-legend span.dot-tokyo,
-    .map-legend span.dot-niigata {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      display: inline-block;
-      margin-right: 4px;
-    }
-    .map-legend span.dot-tokyo {
-      background: #f28f6b;
-    }
-    .map-legend span.dot-niigata {
-      background: #5b8ad6;
-    }
-
-    .restaurant-panel {
-      margin-top: 10px;
-      padding-top: 6px;
-      border-top: 1px dashed var(--border-soft);
-    }
-
-    .restaurant-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .restaurant-item {
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      align-items: center;
-      font-size: 12px;
-    }
-
-    .restaurant-info {
-      flex: 1;
-    }
-
-    .restaurant-name {
-      font-weight: 600;
-      color: var(--blue-deep);
-    }
-
-    .restaurant-tags {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .restaurant-action a {
-      font-size: 11px;
-      text-decoration: none;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(201,163,107,0.8);
-      color: #6a4a21;
-      background: linear-gradient(135deg, #fffaf2, #f0e0c6);
-      box-shadow: 0 5px 12px rgba(120, 80, 30, 0.18);
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-        background var(--transition-fast);
-      white-space: nowrap;
-    }
-
-    .restaurant-action a:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(120, 80, 30, 0.28);
-      background: linear-gradient(135deg, #fff4dd, #ead0aa);
-    }
-
-    .open-status {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .toolbar button {
-      border-radius: 999px;
-      border: 1px solid rgba(58,82,110,0.12);
-      background: rgba(58,82,110,0.04);
-      padding: 4px 10px;
-      font-size: 11px;
-      color: var(--blue-deep);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background var(--transition-fast), box-shadow var(--transition-fast),
-        transform var(--transition-fast), border-color var(--transition-fast);
-    }
-
-    .toolbar button:hover {
-      background: rgba(58,82,110,0.09);
-      border-color: rgba(58,82,110,0.22);
-      box-shadow: 0 6px 18px rgba(25, 40, 68, 0.16);
-      transform: translateY(-1px);
-    }
-
-    .toolbar button span.icon {
-      width: 14px;
-      height: 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(201,163,107,0.68);
-      background: radial-gradient(circle at 30% 20%, #fffefa, #e0c293);
-    }
-
-    [contenteditable="true"] {
-      cursor: text;
-    }
-
-    [contenteditable="true"]:focus {
-      outline: 1px dashed rgba(201,163,107,0.7);
-      outline-offset: 2px;
-      background-color: rgba(255,250,240,0.7);
-    }
-
-    .expense-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(10, 18, 35, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      backdrop-filter: blur(6px);
-    }
-
-    .expense-overlay.hidden {
-      display: none;
-    }
-
-    .expense-panel {
-      width: min(880px, 96vw);
-      max-height: 90vh;
-      background: linear-gradient(145deg, #ffffff, #f5f6fb);
-      border-radius: 24px;
-      box-shadow: 0 26px 80px rgba(8, 15, 30, 0.65);
-      padding: 18px 20px 16px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .expense-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 10px;
-      border-bottom: 1px solid rgba(58,82,110,0.12);
-      padding-bottom: 6px;
-    }
-
-    .expense-title-main {
+    .day-title{
+      font-weight: 800;
       font-size: 14px;
-      font-weight: 600;
-      color: var(--blue-deep);
+      margin:0;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      font-size: 11px;
+      padding: 3px 8px;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+    }
+    .drag-hint{
+      color: var(--muted);
+      font-size: 11px;
+      margin-top:6px;
+    }
+    .day-actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex:0 0 auto;
+    }
+    .icon{
+      width:14px;height:14px;display:inline-block;
+      background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,255,255,.35));
+      -webkit-mask: var(--mask) no-repeat center / contain;
+              mask: var(--mask) no-repeat center / contain;
+      opacity:.9;
+    }
+    .i-edit{ --mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25Zm2.92 2.83H5v-.92l9.06-9.06.92.92L5.92 20.08ZM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83Z"/></svg>');}
+    .i-trash{ --mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12ZM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4Z"/></svg>');}
+    .i-plus{ --mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2Z"/></svg>');}
+    .i-reset{ --mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5H5c0 3.87 3.13 7 7 7s7-3.13 7-7-3.13-7-7-7Z"/></svg>');}
+    .i-save{ --mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4Zm0 2.5L19.5 8H17V5.5ZM12 19a3 3 0 1 1 0-6 3 3 0 0 1 0 6ZM6 5h9v4H6V5Z"/></svg>');}
+
+    .day-body{
+      padding: 10px 12px 12px;
     }
 
-    .expense-title-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .expense-close-btn {
-      border: none;
-      background: transparent;
+    .items{
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(234,240,255,.95);
+      line-height: 1.6;
       font-size: 13px;
-      cursor: pointer;
-      color: var(--text-muted);
-      padding: 4px 8px;
-      border-radius: 999px;
-      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+    .items li{
+      margin: 4px 0;
+    }
+    .star{
+      color: var(--warn);
+      font-weight: 800;
     }
 
-    .expense-close-btn:hover {
-      background: rgba(58,82,110,0.06);
-      color: var(--blue-deep);
-    }
-
-    .expense-body {
-      flex: 1;
-      overflow: auto;
-      padding: 4px 0 0;
+    .cost-row{
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(255,255,255,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color: var(--muted);
       font-size: 12px;
-      color: var(--text-main);
+    }
+    .cost-val{
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing:.2px;
     }
 
-    .expense-intro {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
+    /* Edit mode */
+    .edit-area{
+      display:grid;
+      gap:10px;
+      grid-template-columns: 1fr;
     }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .field label{
+      font-size: 12px;
+      color: var(--muted);
+    }
+    input[type="text"], textarea, select{
+      width:100%;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      padding: 10px 10px;
+      font-size: 13px;
+      outline:none;
+    }
+    textarea{min-height: 110px; resize: vertical;}
 
-    .expense-table-wrapper {
+    .right-wrap{
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .card{
+      border:1px solid var(--line);
       border-radius: 16px;
-      border: 1px solid rgba(58,82,110,0.12);
-      background: rgba(255,255,255,0.95);
-      box-shadow: 0 10px 30px rgba(20, 33, 61, 0.1);
-      overflow: hidden;
+      background: rgba(17,26,46,.68);
+      padding: 12px;
     }
+    .card h3{
+      margin:0 0 8px;
+      font-size: 13px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .small{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .table th, .table td{
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 8px 8px;
+      font-size: 12px;
+      text-align:left;
+      vertical-align:top;
+    }
+    .table th{color: var(--muted); font-weight:700;}
+    .table tr:last-child td{border-bottom:none;}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      font-size: 11px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .row input[type="text"]{flex:1 1 140px;}
+    .row select{flex:0 0 120px;}
+    .row button{flex:0 0 auto;}
 
-    table.expense-table {
-      width: 100%;
-      border-collapse: collapse;
+    .sync-ind{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color: var(--muted);
       font-size: 12px;
     }
-
-    table.expense-table thead {
-      background: linear-gradient(135deg, #f4f5fb, #e8edf7);
+    .dot{
+      width:10px;height:10px;border-radius:99px;
+      background: rgba(255,255,255,.18);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.05);
     }
-
-    table.expense-table th,
-    table.expense-table td {
-      padding: 6px 8px;
-      border-bottom: 1px solid rgba(58,82,110,0.08);
-      text-align: left;
-    }
-
-    table.expense-table th {
-      font-weight: 600;
-      color: var(--blue-deep);
-      font-size: 11px;
-      white-space: nowrap;
-    }
-
-    table.expense-table td input[type="text"],
-    table.expense-table td input[type="number"] {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid rgba(58,82,110,0.25);
-      padding: 3px 6px;
-      font-size: 11px;
-      outline: none;
-      background: rgba(255,255,255,0.95);
-    }
-
-    table.expense-table td input[type="number"] {
-      text-align: right;
-    }
-
-    table.expense-table td input:focus {
-      border-color: var(--gold-warm);
-      box-shadow: 0 0 0 1px rgba(201,163,107,0.26);
-      background: #fffdf8;
-    }
-
-    .expense-remove-row-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(220,80,80,0.5);
-      background: rgba(220,80,80,0.06);
-      color: #a33a3a;
-      font-size: 10px;
-      padding: 2px 6px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .expense-remove-row-btn:hover {
-      background: rgba(220,80,80,0.12);
-    }
-
-    .expense-footer {
-      margin-top: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .expense-totals span {
-      margin-right: 10px;
-    }
-
-    .expense-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .expense-add-row-btn {
-      border-radius: 999px;
-      border: 1px dashed rgba(58,82,110,0.4);
-      background: rgba(58,82,110,0.03);
-      padding: 4px 10px;
-      font-size: 11px;
-      color: var(--blue-deep);
-      cursor: pointer;
-    }
-
-    .expense-save-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(201,163,107,0.9);
-      background: linear-gradient(135deg, #fffaf2, #f0e0c6);
-      padding: 4px 12px;
-      font-size: 11px;
-      color: #6a4a21;
-      cursor: pointer;
-      box-shadow: 0 6px 16px rgba(120, 80, 30, 0.22);
-      white-space: nowrap;
-    }
-
-    .expense-save-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 9px 24px rgba(120, 80, 30, 0.28);
-    }
-
-    @media (max-width: 960px) {
-      body {
-        padding: 12px;
-      }
-      .page {
-        padding: 18px 16px 20px;
-        border-radius: 20px;
-      }
-      header {
-        flex-direction: column;
-      }
-      main {
-        grid-template-columns: 1fr;
-      }
-      #map {
-        height: 260px;
-      }
-    }
+    .dot.ok{background: rgba(116,240,197,.9); box-shadow: 0 0 0 3px rgba(116,240,197,.18);}
+    .dot.err{background: rgba(255,107,107,.95); box-shadow: 0 0 0 3px rgba(255,107,107,.18);}
+    .dot.busy{background: rgba(255,209,102,.95); box-shadow: 0 0 0 3px rgba(255,209,102,.18);}
   </style>
 </head>
+
 <body>
   <div class="page">
     <header>
       <div class="title-block">
-        <h1>東京 × 越後湯澤 × 新潟｜9天與陸少XD同行冬季行程</h1>
+        <h1>大阪 × 京都 × 神戶｜8天冬季行程（多人同步版）</h1>
         <div class="subtitle">
-          2026/1/10 夜晚抵達東京 · 2026/1/18 16:55 自東京返程<br />
-          1天東京過夜 · 8天越後湯澤 & 新潟雪國（含移動日） · 含2天滑雪 & 溫泉
-        </div>
-        <div class="meta">
-          <div class="meta-pill">
-            <span class="icon"></span> 共 9 天 · 8 晚
-          </div>
-          <div class="meta-pill">
-            ⛷️ 2 天滑雪（GALA 湯澤 & Kagura）
-          </div>
-          <div class="meta-pill">
-            🚄 東京 &lt;&gt; 越後湯澤 & 新潟：上越新幹線
-          </div>
-          <div class="meta-pill">
-            🍶 新潟米飯 · 清酒 · 日本海海鮮
-          </div>
-        </div>
-      </div>
-      <div class="budget-summary">
-        <h2>預算總覽 · JPY</h2>
-        <div class="budget-row">
-          <span>估計總預算（每人）</span>
-          <span id="totalRange" class="budget-em">–</span>
-        </div>
-        <div class="budget-row">
-          <span>每日平均</span>
-          <span id="dailyRange">–</span>
-        </div>
-        <div class="budget-row">
-          <span>已記錄實際總花費</span>
-          <span id="actualTotal">尚未填寫</span>
-        </div>
-        <div class="budget-row">
-          <span>主要花費</span>
-          <span>交通 · 滑雪套票 · 餐飲 · 門票</span>
-        </div>
-        <div class="budget-note">
-          ※ 以上越新幹線票價區間、滑雪一日券＋租裝備、新潟平均餐費推估。<br />
-          ※ 不含國際機票與購物支出，實際費用視匯率與預約方案調整。
+          2026/1/24 13:00 抵達關西國際機場 · 2026/1/31 20:15 自關西返程<br />
+          市區 × 郊區：大阪（USJ/溫泉/購物）＋ 京都（嵐山/清水寺）＋ 神戶（港灣夜景）
         </div>
       </div>
     </header>
 
-    <main>
+    <div class="grid">
       <!-- 左側：行程 -->
       <section class="panel">
         <div class="panel-header">
@@ -934,113 +371,99 @@
           </div>
           <div class="toolbar">
             <button id="resetOrderBtn">
-              <span class="icon"></span> 回到建議排序（會清除所有記錄）
+              <span class="icon i-reset"></span> 回到建議排序（會清除所有記錄）
+            </button>
+            <button id="editModeBtn" class="btn-primary">
+              <span class="icon i-edit"></span> 修改行程
             </button>
           </div>
         </div>
         <div id="itineraryList" class="itinerary-list"></div>
       </section>
 
-      <!-- 右側：地圖 & 餐廳 -->
-      <section class="panel">
+      <!-- 右側：明細記賬 -->
+      <aside class="panel">
         <div class="panel-header">
           <div>
             <div class="panel-title">
-              <span class="panel-title-dot"></span> 地圖 & 動線最佳化
+              <span class="panel-title-dot"></span> 明細記賬（自動加總到每日「實際花費」）
             </div>
             <div class="panel-subtitle">
-              點選行程日可在地圖上高亮當天重點地點。
+              任何人新增/修改明細後，會即時同步給所有人；每日「實際花費」不可手動改，只由明細總數計算。
+            </div>
+          </div>
+          <div class="toolbar">
+            <div class="sync-ind" title="Firestore 即時同步狀態">
+              <span id="syncDot" class="dot"></span>
+              <span id="syncText">未連線</span>
             </div>
           </div>
         </div>
-        <div id="map"></div>
-        <div class="map-legend">
-          <div>
-            <span class="dot-tokyo"></span> 東京區域
-            &nbsp;&nbsp;
-            <span class="dot-niigata"></span> 越後湯澤 · 新潟區域
-          </div>
-          <div>線條：依目前行程排序串連的移動動線（新幹線／滑雪／市區）</div>
-        </div>
 
-        <div class="restaurant-panel">
-          <div class="panel-title" style="font-size: 13px; margin-bottom: 2px;">
-            <span class="panel-title-dot"></span> 推薦餐廳 · 訂位 & 即時營業時間
+        <div class="right-wrap">
+          <div class="card">
+            <h3>快速新增一筆</h3>
+            <div class="row">
+              <select id="expDaySelect"></select>
+              <select id="expPayerSelect">
+                <option value="Lok">Lok</option>
+                <option value="Wai">Wai</option>
+              </select>
+            </div>
+            <div class="row">
+              <input id="expTitle" type="text" placeholder="項目（例：晚餐、交通、門票…）" />
+              <input id="expAmount" type="text" placeholder="金額（JPY）" inputmode="numeric" />
+            </div>
+            <div class="row">
+              <button id="addExpenseBtn" class="btn-ok">
+                <span class="icon i-plus"></span> 新增明細
+              </button>
+            </div>
+            <div class="small">提示：金額只接受數字；會自動加總到對應日期。</div>
           </div>
-          <div class="panel-subtitle" style="font-size: 11px;">
-            點擊「查看地圖 / 訂位」將開啟 Google 地圖：可直接查看營業時間、電話與線上訂位連結。
-          </div>
-          <div id="restaurantList" class="restaurant-list"></div>
-        </div>
-      </section>
-    </main>
-  </div>
 
-  <!-- 記帳分頁覆蓋層 -->
-  <div id="expenseOverlay" class="expense-overlay hidden">
-    <div class="expense-panel">
-      <div class="expense-header">
-        <div>
-          <div id="expenseTitleMain" class="expense-title-main"></div>
-          <div id="expenseTitleSub" class="expense-title-sub"></div>
+          <div class="card">
+            <h3>明細列表</h3>
+            <table class="table" id="expenseTable">
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>付款人</th>
+                  <th>項目</th>
+                  <th>金額 (JPY)</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="expenseTbody"></tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <h3>小提示</h3>
+            <div class="small">
+              <div class="pill">多人同步：同一份文件</div>
+              <div class="pill">旅途中網路不穩：稍後會自動重試</div>
+              <div class="pill">行程拖拽：可自訂順序</div>
+            </div>
+          </div>
         </div>
-        <button type="button" class="expense-close-btn" id="expenseCloseBtn">關閉 ✕</button>
-      </div>
-      <div class="expense-body">
-        <div class="expense-intro">
-          本頁可記錄<strong>當天的消費明細</strong>，並分別輸入 Lok / Wai 的金額。<br>
-          例如：餐費、車票、門票、租借裝備等。按「儲存並關閉」後會自動加總，寫回列表中的「實際花費」。
-        </div>
-        <div class="expense-table-wrapper">
-          <table class="expense-table">
-            <thead>
-              <tr>
-                <th style="width: 42%;">消費項目 / 備註</th>
-                <th style="width: 18%;">Lok (JPY)</th>
-                <th style="width: 18%;">Wai (JPY)</th>
-                <th style="width: 10%;">合計</th>
-                <th style="width: 12%; text-align:center;">操作</th>
-              </tr>
-            </thead>
-            <tbody id="expenseTableBody">
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="expense-footer">
-        <div class="expense-totals">
-          <span id="expenseTotalA">Lok：0 JPY</span>
-          <span id="expenseTotalB">Wai：0 JPY</span>
-          <span id="expenseTotalBoth">兩人合計：0 JPY</span>
-        </div>
-        <div class="expense-actions">
-          <button type="button" class="expense-add-row-btn" id="expenseAddRowBtn">＋ 新增一筆消費</button>
-          <button type="button" class="expense-save-btn" id="expenseSaveBtn">儲存並關閉</button>
-        </div>
-      </div>
+      </aside>
     </div>
   </div>
 
-  <!-- Leaflet Script -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-    data-versioned="true"
-  ></script>
-
-  <!-- 主程式：ES module + Firebase Firestore -->
+  <!-- Firebase (Firestore) -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      onSnapshot
-    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+      getFirestore, doc, getDoc, setDoc, onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    const firebaseConfig = {
+    /***********************
+     * 1) Firebase 設定
+     ***********************/
+    // ⚠️ 請保持與你原本專案一致（你現有 HTML 內的 config）
+    // 如果你之前已經能同步成功，這裡通常不用改。
+   const firebaseConfig = {
       apiKey: "AIzaSyA56n9PCvDn2izWf3cxm8BVWcMK-bPD6OQ",
       authDomain: "tokyo-trip-2026-5edba.firebaseapp.com",
       projectId: "tokyo-trip-2026-5edba",
@@ -1052,950 +475,544 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
+    // 你們共用的唯一文件（配合 Firestore rules）
     const tripDocRef = doc(db, "trips", "tokyo-trip-2026");
 
-    // === 初始行程資料 ===
+    /***********************
+     * 2) 初始行程（大阪 8 天）
+     ***********************/
     const initialItinerary = [
       {
-        id: 1,
-        date: "2026-01-10",
-        label: "Day 1 · 1/10（六）",
-        region: "東京",
-        title: "夜晚抵達東京 · 新宿散步",
-        description:
-          "傍晚或夜晚抵達東京，搭電車前往新宿周邊飯店辦理入住，簡單熟悉環境。晚上可前往新宿南口／NEWoMan 或都廳夜景，適應氣候與時差。",
-        bullets: [
-          "成田／羽田機場 ⇒ 東京／新宿（N'EX 或機場巴士）",
-          "入住新宿車站周邊飯店，方便隔日移動",
-          "新宿街頭散步，可順路採買保暖用品或雪具小物"
-        ],
-        tags: ["抵達日", "輕鬆行程", "城市夜景"],
-        spots: [
-          { name: "東京站", lat: 35.681236, lng: 139.767125, type: "tokyo" },
-          { name: "新宿站", lat: 35.690921, lng: 139.700257, type: "tokyo" }
-        ],
-        budget: {
-          min: 9000,
-          max: 14000,
-          note: "機場交通 + 晚餐 + Suica / Pasmo 交通儲值（不含國際機票）"
-        }
+        dayKey: "day1",
+        dateLabel: "Day 1｜1/24（六）",
+        title: "抵達大阪・市區暖身",
+        items: [
+          "13:00 抵達關西國際機場",
+          "13:00–14:30 入境、領行李",
+          "14:45–15:30 南海電鐵 → 難波",
+          "15:45–16:15 飯店寄放行李／Check-in",
+          "16:30–18:00 心齋橋筋商店街（慢逛、不買重物）",
+          "18:00–20:00 道頓堀晚餐＋夜景",
+          "20:00– 回飯店休息"
+        ]
       },
       {
-        id: 2,
-        date: "2026-01-11",
-        label: "Day 2 · 1/11（日）",
-        region: "越後湯澤",
-        title: "東京 ⇒ 越後湯澤 · 溫泉街散步 & Ponshukan",
-        description:
-          "早上從東京站搭上越新幹線前往越後湯澤，先入住或寄放行李，慢慢逛溫泉街與站內 Ponshukan，安排清酒試飲與足湯，當作進入新潟雪國的暖身日。",
-        bullets: [
-          "上午：東京站 ⇒ 越後湯澤站（上越新幹線，約70〜90分鐘）",
-          "中午：站內或溫泉街享用 hegi 蕎麥麵等在地料理",
-          "午後：Ponshukan 清酒試飲、溫泉街足湯與小店散步，晚上回旅館泡湯"
-        ],
-        tags: ["移動日", "新潟縣", "清酒體驗", "溫泉"],
-        spots: [
-          { name: "東京站", lat: 35.681236, lng: 139.767125, type: "tokyo" },
-          { name: "越後湯澤站", lat: 36.9361, lng: 138.8099, type: "niigata" },
-          { name: "越後湯澤 Ponshukan", lat: 36.9364, lng: 138.8096, type: "niigata" }
-        ],
-        budget: {
-          min: 14000,
-          max: 20000,
-          note: "東京⇔越後湯澤新幹線單程 + 餐費 + 少量清酒試飲與伴手禮"
-        }
+        dayKey: "day2",
+        dateLabel: "Day 2｜1/25（日）",
+        title: "大阪市區｜市場＋夜景",
+        items: [
+          "09:00 出門",
+          "09:30–11:00 黑門市場（早餐＋午餐一起吃）",
+          "11:30–13:00 中崎町咖啡／小店",
+          "13:30–15:30 ★ 回飯店休息或梅田百貨",
+          "16:00–17:00 梅田空中庭園",
+          "17:30–18:00 HEP FIVE 摩天輪",
+          "18:30–20:00 梅田晚餐",
+          "20:30– 回飯店"
+        ]
       },
       {
-        id: 3,
-        date: "2026-01-12",
-        label: "Day 3 · 1/12（一）",
-        region: "越後湯澤",
-        title: "GALA 湯澤滑雪（第1日）",
-        description:
-          "第一天正式上雪道！從越後湯澤站搭接駁至 GALA 湯澤雪場，建議選擇一日套票（纜車＋雪具租借＋初學課程），晚上回溫泉旅館好好放鬆腿部肌肉。",
-        bullets: [
-          "上午：從越後湯澤站搭接駁或新幹線直達 GALA 湯澤站",
-          "在租借區領取雪板／雪鞋與衣物，參加初學課程或自行練習",
-          "傍晚：返回越後湯澤溫泉旅館，晚餐建議選溫泉旅館會席料理"
-        ],
-        tags: ["滑雪", "雪國體驗", "溫泉旅館"],
-        spots: [
-          { name: "越後湯澤站", lat: 36.9361, lng: 138.8099, type: "niigata" },
-          { name: "GALA 湯澤滑雪場", lat: 36.950483, lng: 138.799478, type: "niigata" }
-        ],
-        budget: {
-          min: 18000,
-          max: 26000,
-          note: "GALA 一日券＋租裝備 + 餐食 + 溫泉旅館住宿"
-        }
+        dayKey: "day3",
+        dateLabel: "Day 3｜1/26（一）",
+        title: "京都郊區｜嵐山自然系",
+        items: [
+          "08:30 出門",
+          "09:30–10:00 抵達嵐山",
+          "10:00–11:30 竹林＋周邊散步",
+          "11:45–12:45 午餐（湯豆腐／日式定食）",
+          "13:00–14:00 渡月橋＋河畔",
+          "14:30–15:30 ★ 咖啡／甜點",
+          "16:00–17:00 回大阪",
+          "18:30– 大阪晚餐"
+        ]
       },
       {
-        id: 4,
-        date: "2026-01-13",
-        label: "Day 4 · 1/13（二）",
-        region: "越後湯澤",
-        title: "Kagura / Naeba 高雪質滑雪（第2日）",
-        description:
-          "第二天前往雪質佳、雪季長的 Kagura 或 Naeba 滑雪場，適合已稍微上手者挑戰更長雪道；也可以選擇較平緩路線悠閒滑行。",
-        bullets: [
-          "乘接駁巴士前往 Kagura / Naeba 滑雪場",
-          "體驗長距離雪道與粒雪粉雪，適合進階初學～中級者",
-          "夜晚返回越後湯澤溫泉街，品嚐當地拉麵或日式居酒屋"
-        ],
-        tags: ["滑雪", "雪國體驗", "巴士移動"],
-        spots: [
-          { name: "越後湯澤站 / 溫泉街", lat: 36.9361, lng: 138.8099, type: "niigata" },
-          { name: "Kagura 滑雪場", lat: 36.835, lng: 138.802, type: "niigata" }
-        ],
-        budget: {
-          min: 17000,
-          max: 25000,
-          note: "滑雪一日券＋租裝備 + 接駁巴士 + 三餐"
-        }
+        dayKey: "day4",
+        dateLabel: "Day 4｜1/27（二）",
+        title: "京都郊區｜清水寺・古街",
+        items: [
+          "08:30 出門",
+          "09:45–11:30 清水寺",
+          "11:30–13:00 二年坂・三年坂（邊走邊吃）",
+          "13:30–14:30 八坂神社",
+          "15:00–16:00 ★ 祇園咖啡",
+          "16:30–17:30 回大阪",
+          "18:30– 晚餐"
+        ]
       },
       {
-        id: 5,
-        date: "2026-01-14",
-        label: "Day 5 · 1/14（三）",
-        region: "越後湯澤",
-        title: "越後湯澤溫泉街 · 雪見溫泉 & 小鎮慢遊",
-        description:
-          "結束兩天高強度滑雪後，以悠閒步調享受雪見溫泉與小鎮氛圍。可安排足湯、咖啡店、雪地散步與再訪喜歡的餐廳。",
-        bullets: [
-          "上午：睡到自然醒，溫泉街咖啡店或麵包店簡單早餐",
-          "中午：在地 hegi 蕎麥麵、豬排丼等名物再訪或嘗試新店",
-          "午後：雪國館、足湯、街道散步與小店採購，晚上再泡一次溫泉"
-        ],
-        tags: ["溫泉小鎮", "低強度行程", "療癒日"],
-        spots: [
-          { name: "越後湯澤溫泉街", lat: 36.9361, lng: 138.8099, type: "niigata" }
-        ],
-        budget: {
-          min: 9000,
-          max: 15000,
-          note: "在地餐廳 + 咖啡店 / 甜點，無長距離交通"
-        }
+        dayKey: "day5",
+        dateLabel: "Day 5｜1/28（三）",
+        title: "大阪市區｜環球影城 USJ",
+        items: [
+          "06:30 起床",
+          "07:00 出門",
+          "07:30–08:00 抵達園區排隊",
+          "08:30–12:30 超級任天堂世界（優先）",
+          "12:30–13:30 午餐",
+          "13:30–17:30 哈利波特＋遊樂設施",
+          "18:00–19:00 晚餐",
+          "19:30–20:30 ★ 夜間表演／再玩一次",
+          "21:30 回飯店"
+        ]
       },
       {
-        id: 6,
-        date: "2026-01-15",
-        label: "Day 6 · 1/15（四）",
-        region: "十日町 · 清津峽",
-        title: "十日町 · 清津峽 Tunnel of Light · 雪國藝術",
-        description:
-          "搭乘地方列車或巴士前往十日町／清津峽，造訪結合大地藝術祭的『Tunnel of Light』，冬季雪景映照峽谷極具張力。亦可安排 Echigo-Tsumari Art Field 的室內作品。",
-        bullets: [
-          "上午：越後湯澤 ⇒ 十日町（JR 或巴士）",
-          "清津峽 · Tunnel of Light 藝術化隧道，欣賞雪景與光影",
-          "視體力參觀其他 Echigo-Tsumari 室內作品，傍晚返回越後湯澤"
-        ],
-        tags: ["自然景觀", "藝術祭", "一日小旅行"],
-        spots: [
-          { name: "清津峽 Tunnel of Light", lat: 37.0656, lng: 138.6711, type: "niigata" }
-        ],
-        budget: {
-          min: 10000,
-          max: 16000,
-          note: "區間車 / 巴士交通 + 清津峽門票 + 餐費"
-        }
+        dayKey: "day6",
+        dateLabel: "Day 6｜1/29（四）",
+        title: "神戶郊區｜港灣＋夜景",
+        items: [
+          "09:00 出門",
+          "10:00–11:30 北野異人館",
+          "12:00–13:30 神戶牛午餐（鐵板燒）",
+          "14:00–15:30 神戶港散步",
+          "16:30–18:00 摩耶山夜景（或港塔）",
+          "19:30– 回大阪"
+        ]
       },
       {
-        id: 7,
-        date: "2026-01-16",
-        label: "Day 7 · 1/16（五）",
-        region: "新潟市",
-        title: "越後湯澤 ⇒ 新潟市 · 日本海海景與古町散策",
-        description:
-          "由越後湯澤搭上越新幹線前往新潟市區，入住車站附近飯店。下午前往萬代橋、信濃川河畔與古町花街散步，感受『水之都』氛圍。",
-        bullets: [
-          "上午：越後湯澤 ⇒ 新潟站（上越新幹線，約50–60 分鐘）",
-          "午後：萬代橋、信濃川河岸散步，順訪古町商店街",
-          "晚餐：新潟在地居酒屋，品嚐日本海海鮮與地酒"
-        ],
-        tags: ["移動日", "城市散步", "日本海海景"],
-        spots: [
-          { name: "越後湯澤站", lat: 36.9361, lng: 138.8099, type: "niigata" },
-          { name: "新潟站", lat: 37.912051855, lng: 139.061245322, type: "niigata" },
-          { name: "萬代橋", lat: 37.9187, lng: 139.0544, type: "niigata" }
-        ],
-        budget: {
-          min: 11000,
-          max: 17000,
-          note: "新幹線單程 + 市區交通 + 海鮮晚餐"
-        }
+        dayKey: "day7",
+        dateLabel: "Day 7｜1/30（五）",
+        title: "大阪市區｜溫泉＋購物",
+        items: [
+          "10:00 出門",
+          "11:00–15:00 空庭溫泉（含午餐）",
+          "16:00–18:30 心齋橋／難波購物",
+          "19:00– 最後一晚大阪晚餐"
+        ]
       },
       {
-        id: 8,
-        date: "2026-01-17",
-        label: "Day 8 · 1/17（六）",
-        region: "新潟市",
-        title: "Pier Bandai 海鮮市場 · 新潟清酒 & 米食文化",
-        description:
-          "在新潟的完整一天，主打當地海鮮與清酒。上午前往 Pier Bandai 市場享用海鮮丼與生蠔，下午可造訪清酒相關設施或水族館。晚上悠閒打包行李。",
-        bullets: [
-          "上午：Pier Bandai · 海鮮市場早餐／早午餐，採買伴手禮",
-          "午後：新潟市水族館 MARINEPIA Nihonkai 或清酒相關設施",
-          "晚上：再訪喜歡的居酒屋或溫泉設施，準備隔日返程"
-        ],
-        tags: ["海鮮市場", "清酒文化", "放鬆日"],
-        spots: [
-          { name: "Pier Bandai", lat: 37.9178, lng: 139.0543, type: "niigata" }
-        ],
-        budget: {
-          min: 10000,
-          max: 17000,
-          note: "海鮮丼 + 伴手禮 + 清酒品飲，市區交通"
-        }
-      },
-      {
-        id: 9,
-        date: "2026-01-18",
-        label: "Day 9 · 1/18（日）",
-        region: "新潟 ⇒ 東京",
-        title: "新潟 ⇒ 東京 ⇒ 機場 · 回程",
-        description:
-          "早上從新潟站搭上越新幹線返回東京，於東京站附近簡單用餐與最後購物，再依起飛時間前往成田／羽田機場，預留足夠換車與安檢時間。",
-        bullets: [
-          "新潟站 ⇒ 東京站（上越新幹線）",
-          "東京站一番街 & Gransta 最後採買",
-          "依 16:55 起飛時間倒推 3–4 小時，提前抵達機場辦理登機"
-        ],
-        tags: ["返程日", "最後採買", "新幹線移動"],
-        spots: [
-          { name: "新潟站", lat: 37.912051855, lng: 139.061245322, type: "niigata" },
-          { name: "東京站", lat: 35.681236, lng: 139.767125, type: "tokyo" }
-        ],
-        budget: {
-          min: 11000,
-          max: 17000,
-          note: "新幹線單程 + 機場交通 + 餐費（不含免稅店購物）"
-        }
+        dayKey: "day8",
+        dateLabel: "Day 8｜1/31（六）",
+        title: "Outlet＋回程",
+        items: [
+          "09:30 退房",
+          "10:30–14:30 臨空城 Outlet（午餐在此）",
+          "17:30–18:00 抵達關西機場",
+          "20:15 起飛 ✈️"
+        ]
       }
     ];
 
-    const restaurants = [
-      {
-        area: "越後湯澤溫泉街",
-        name: "人參亭 Ninjin-tei",
-        desc: "人氣豬排丼 · 冬季常大排長龍，建議避開尖峰或提前抵達。",
-        tags: "豬排丼 / 在地名店",
-        url: "https://www.google.com/maps/search/%E8%B6%8A%E5%BE%8C%E6%B9%AF%E6%BE%A4+%E4%BA%BA%E5%8F%83%E4%BA%AD"
-      },
-      {
-        area: "越後湯澤站內 Ponshukan",
-        name: "ぽんしゅ館 越後湯澤驛店",
-        desc: "集結新潟多家清酒酒藏與伴手禮，站內就能完成清酒試飲與購物。",
-        tags: "清酒試飲 / 伴手禮",
-        url: "https://www.google.com/maps/search/%E3%81%BD%E3%82%93%E3%81%97%E3%82%85%E9%A4%A8+%E8%B6%8A%E5%BE%8C%E6%B9%AF%E6%BE%A4"
-      },
-      {
-        area: "越後湯澤溫泉街",
-        name: "越後湯澤 Hegi 蕎麥麵（例如：しんばし）",
-        desc: "使用布海苔製作的 hegi 蕎麥麵，是魚沼、新潟的代表麵食。",
-        tags: "蕎麥麵 / 在地料理",
-        url: "https://www.google.com/maps/search/%E8%B6%8A%E5%BE%8C%E6%B9%AF%E6%BE%A4+%E3%81%97%E3%82%93%E3%81%B0%E3%81%97+%E8%95%8E%E9%BA%A6"
-      },
-      {
-        area: "東京 · 淺草",
-        name: "淺草今半 國際通本店",
-        desc: "老牌壽喜燒名店，適合東京段安排一晚較正式的和牛晚餐。",
-        tags: "壽喜燒 / 和牛",
-        url: "https://www.google.com/maps/search/%E6%B7%BA%E8%8D%89%E4%BB%8A%E5%8D%8A"
-      },
-      {
-        area: "新潟市區 · Pier Bandai",
-        name: "Pier Bandai 海鮮丼店（例：廻轉壽司・弁慶）",
-        desc: "集合多家海鮮丼與迴轉壽司店，早午餐就能吃到日本海新鮮漁獲。",
-        tags: "海鮮丼 / 迴轉壽司",
-        url: "https://www.google.com/maps/search/Pier+Bandai+%E5%BC%81%E6%85%B6"
-      },
-      {
-        area: "新潟站周邊",
-        name: "ぽんしゅ館 新潟驛店（Kaku-uchi 酒吧）",
-        desc: "離新潟站極近，可邊等車邊品嚐不同酒藏的清酒與輕食。",
-        tags: "立飲酒吧 / 清酒",
-        url: "https://www.google.com/maps/search/%E3%81%BD%E3%82%93%E3%81%97%E3%82%85%E9%A4%A8+%E6%96%B0%E6%BD%9F%E9%A7%85"
-      }
+    // 初始明細（可留空）
+    const initialExpenseDetails = [
+      // { id: "e1", dayKey: "day1", payer: "Lok", title: "交通", amount: 1200 }
     ];
 
-    let itinerary = JSON.parse(JSON.stringify(initialItinerary));
-    let expenseDetails = {};
-    // 哪些日卡在「編輯模式」
-    let editModeDays = new Set();
+    /***********************
+     * 3) 狀態
+     ***********************/
+    let itinerary = structuredClone(initialItinerary);
+    let expenseDetails = structuredClone(initialExpenseDetails);
 
-    async function loadFromCloud() {
-      try {
-        const snap = await getDoc(tripDocRef);
-        if (snap.exists()) {
-          const data = snap.data();
-          if (Array.isArray(data.itinerary)) {
-            itinerary = data.itinerary;
-          }
-          if (data.expenseDetails && typeof data.expenseDetails === "object") {
-            expenseDetails = data.expenseDetails;
-          } else {
-            expenseDetails = {};
-          }
-          renderItinerary();
-          updateBudgetSummary();
-          updateMap();
-        } else {
-          await setDoc(tripDocRef, { itinerary, expenseDetails });
-        }
-      } catch (e) {
-        console.error("載入雲端資料失敗：", e);
-      }
-    }
+    let isEditMode = false;
+    let isApplyingRemote = false;
+    let debounceTimer = null;
 
-    async function saveStateToCloud() {
-      try {
-        await setDoc(tripDocRef, { itinerary, expenseDetails });
-      } catch (e) {
-        console.warn("儲存到雲端失敗：", e);
-      }
-    }
-
-    function saveState() {
-      saveStateToCloud();
-    }
-
-    // Firestore 即時更新
-    onSnapshot(tripDocRef, (snap) => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (Array.isArray(data.itinerary)) {
-        itinerary = data.itinerary;
-      }
-      if (data.expenseDetails && typeof data.expenseDetails === "object") {
-        expenseDetails = data.expenseDetails;
-      } else {
-        expenseDetails = {};
-      }
-      renderItinerary();
-      updateBudgetSummary();
-      updateMap();
-    });
-
+    /***********************
+     * 4) UI 元件
+     ***********************/
     const itineraryListEl = document.getElementById("itineraryList");
-    const totalRangeEl = document.getElementById("totalRange");
-    const dailyRangeEl = document.getElementById("dailyRange");
-    const actualTotalEl = document.getElementById("actualTotal");
-    const restaurantListEl = document.getElementById("restaurantList");
     const resetOrderBtn = document.getElementById("resetOrderBtn");
+    const editModeBtn = document.getElementById("editModeBtn");
 
-    const expenseOverlayEl = document.getElementById("expenseOverlay");
-    const expenseTitleMainEl = document.getElementById("expenseTitleMain");
-    const expenseTitleSubEl = document.getElementById("expenseTitleSub");
-    const expenseTableBodyEl = document.getElementById("expenseTableBody");
-    const expenseTotalAEl = document.getElementById("expenseTotalA");
-    const expenseTotalBEl = document.getElementById("expenseTotalB");
-    const expenseTotalBothEl = document.getElementById("expenseTotalBoth");
-    const expenseAddRowBtn = document.getElementById("expenseAddRowBtn");
-    const expenseSaveBtn = document.getElementById("expenseSaveBtn");
-    const expenseCloseBtn = document.getElementById("expenseCloseBtn");
+    const expDaySelect = document.getElementById("expDaySelect");
+    const expPayerSelect = document.getElementById("expPayerSelect");
+    const expTitle = document.getElementById("expTitle");
+    const expAmount = document.getElementById("expAmount");
+    const addExpenseBtn = document.getElementById("addExpenseBtn");
 
-    let currentExpenseDayId = null;
+    const expenseTbody = document.getElementById("expenseTbody");
 
-    // 地圖
-    const map = L.map("map", {
-      zoomControl: false
-    }).setView([36.7, 138.9], 6);
+    const syncDot = document.getElementById("syncDot");
+    const syncText = document.getElementById("syncText");
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap"
-    }).addTo(map);
-
-    L.control.zoom({ position: "bottomright" }).addTo(map);
-
-    let markerGroup = L.layerGroup().addTo(map);
-    let routeLine = null;
-
-    function iconForType(type) {
-      const color = type === "tokyo" ? "#f28f6b" : "#5b8ad6";
-      return L.divIcon({
-        className: "custom-marker",
-        html:
-          '<div style="width:14px;height:14px;border-radius:999px;background:' +
-          color +
-          ';box-shadow:0 0 0 3px rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.15);"></div>',
-        iconSize: [14, 14],
-        iconAnchor: [7, 7]
-      });
+    function setSyncState(state, text){
+      syncDot.classList.remove("ok","err","busy");
+      if(state) syncDot.classList.add(state);
+      syncText.textContent = text || "—";
     }
 
-    function updateMap(highlightDayId = null) {
-      markerGroup.clearLayers();
-      if (routeLine) {
-        map.removeLayer(routeLine);
-        routeLine = null;
-      }
-
-      const coords = [];
-
-      itinerary.forEach((day) => {
-        (day.spots || []).forEach((spot) => {
-          const marker = L.marker([spot.lat, spot.lng], {
-            icon: iconForType(spot.type)
-          }).addTo(markerGroup);
-
-          const isHighlight = highlightDayId && day.id === highlightDayId;
-
-          marker.bindPopup(
-            `<strong>${spot.name}</strong><br/><span style="font-size:11px;">${day.label} · ${day.title}</span>`
-          );
-
-          if (isHighlight) marker.openPopup();
-
-          coords.push([spot.lat, spot.lng]);
-        });
-      });
-
-      if (coords.length) {
-        routeLine = L.polyline(coords, {
-          color: "#c9a36b",
-          weight: 3,
-          opacity: 0.75
-        }).addTo(map);
-        map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
-      }
+    /***********************
+     * 5) 計算每日實際花費（不可手動改）
+     ***********************/
+    function getDayTotal(dayKey){
+      return expenseDetails
+        .filter(x => x.dayKey === dayKey)
+        .reduce((sum, x) => sum + (Number(x.amount) || 0), 0);
     }
 
-    function renderItinerary() {
+    function formatJPY(n){
+      const v = Number(n) || 0;
+      return v.toLocaleString("ja-JP");
+    }
+
+    /***********************
+     * 6) Render 行程
+     ***********************/
+    function renderItinerary(){
       itineraryListEl.innerHTML = "";
-      itinerary.forEach((day) => {
-        const card = document.createElement("article");
+
+      itinerary.forEach((day, idx) => {
+        const card = document.createElement("div");
         card.className = "day-card";
-        card.setAttribute("draggable", "true");
-        card.dataset.id = day.id;
+        card.draggable = !isEditMode;
+        card.dataset.index = String(idx);
 
-        const actualValue = day.actualCost != null ? day.actualCost : "";
-
-        const isEditMode = editModeDays.has(day.id);
-        if (isEditMode) {
-          card.classList.add("edit-mode");
-        }
-
-        const titleEditable = isEditMode ? "true" : "false";
-        const descEditable = isEditMode ? "true" : "false";
-
-        card.innerHTML = `
-          <div class="day-header">
-            <div>
-              <div class="day-label">${day.label}</div>
-              <div class="day-main-title"
-                   contenteditable="${titleEditable}"
-                   data-edit="title"
-                   data-day-id="${day.id}">${day.title}</div>
-            </div>
-            <div class="day-region-pill">
-              <span style="width:7px;height:7px;border-radius:999px;background:${
-                day.region.includes("東京") ? "#f28f6b" : "#5b8ad6"
-              };display:inline-block;"></span>
-              ${day.region}
-            </div>
-          </div>
-          <div class="day-body">
-            <p contenteditable="${descEditable}"
-               data-edit="description"
-               data-day-id="${day.id}">${day.description}</p>
-            <ul>
-              ${day.bullets
-                .map(
-                  (b, idx) =>
-                    `<li class="day-bullet" data-day-id="${day.id}" data-bullet-index="${idx}">
-                      <span class="day-bullet-dot">•</span>
-                      <span class="day-bullet-text"
-                            contenteditable="${isEditMode ? "true" : "false"}"
-                            data-edit="bullet"
-                            data-day-id="${day.id}"
-                            data-bullet-index="${idx}">${b}</span>
-                      <button type="button"
-                              class="day-bullet-delete"
-                              data-day-id="${day.id}"
-                              data-bullet-index="${idx}">🗑</button>
-                    </li>`
-                )
-                .join("")}
-            </ul>
-            ${
-              isEditMode
-                ? `
-                  <button type="button" class="day-add-bullet" data-day-id="${day.id}">
-                    新增行程
-                  </button>
-                  <button type="button"
-                          class="day-edit-finish"
-                          data-day-id="${day.id}">
-                    完成修改
-                  </button>
-                `
-                : `
-                  <button type="button"
-                          class="day-edit-toggle"
-                          data-day-id="${day.id}">
-                    修改行程
-                  </button>
-                `
-            }
-            <div class="day-tags">
-              ${day.tags.map((t) => `<span class="day-tag"># ${t}</span>`).join("")}
-            </div>
-            <div class="day-budget">
-              估計花費：<strong>${day.budget.min.toLocaleString()}〜${day.budget.max.toLocaleString()} JPY</strong><br/>
-              <span>${day.budget.note}</span>
-            </div>
-            <div class="day-actual">
-              <label>
-                實際花費：
-                <input type="number"
-                       min="0"
-                       step="100"
-                       placeholder="0"
-                       data-day-id="${day.id}"
-                       value="${actualValue}"
-                       readonly>
-              </label>
-              <span class="day-actual-note">單位：JPY，由「明細記帳」自動加總 Lok / Wai 後帶入。</span>
-              <button type="button" class="detail-btn" data-day-id="${day.id}">
-                明細記帳
-              </button>
-            </div>
-          </div>
-        `;
-
-        // 點卡片 → 地圖聚焦（排除編輯/按鈕）
-        card.addEventListener("click", (e) => {
-          const tagName = e.target.tagName.toLowerCase();
-          const isEditable =
-            e.target.hasAttribute("contenteditable") ||
-            tagName === "input" ||
-            tagName === "textarea" ||
-            tagName === "button";
-          if (isEditable) return;
-          updateMap(day.id);
-        });
-
-        // 拖曳排序
+        // Drag events
         card.addEventListener("dragstart", (e) => {
-          card.classList.add("dragging");
+          if(isEditMode) return;
+          e.dataTransfer.setData("text/plain", String(idx));
           e.dataTransfer.effectAllowed = "move";
-          e.dataTransfer.setData("text/plain", day.id.toString());
+          card.style.opacity = "0.6";
         });
-
         card.addEventListener("dragend", () => {
-          card.classList.remove("dragging");
-          document
-            .querySelectorAll(".day-card.drag-over")
-            .forEach((el) => el.classList.remove("drag-over"));
+          card.style.opacity = "1";
         });
-
         card.addEventListener("dragover", (e) => {
+          if(isEditMode) return;
           e.preventDefault();
-          const dragging = document.querySelector(".day-card.dragging");
-          if (!dragging || dragging === card) return;
-          card.classList.add("drag-over");
+          e.dataTransfer.dropEffect = "move";
         });
-
-        card.addEventListener("dragleave", () => {
-          card.classList.remove("drag-over");
-        });
-
         card.addEventListener("drop", (e) => {
+          if(isEditMode) return;
           e.preventDefault();
-          card.classList.remove("drag-over");
-          const draggedId = parseInt(e.dataTransfer.getData("text/plain"), 10);
-          const targetId = day.id;
-          if (draggedId === targetId) return;
-
-          const draggedIndex = itinerary.findIndex((d) => d.id === draggedId);
-          const targetIndex = itinerary.findIndex((d) => d.id === targetId);
-          const [draggedItem] = itinerary.splice(draggedIndex, 1);
-          itinerary.splice(targetIndex, 0, draggedItem);
-
+          const fromIdx = Number(e.dataTransfer.getData("text/plain"));
+          const toIdx = idx;
+          if(Number.isNaN(fromIdx) || fromIdx === toIdx) return;
+          const moved = itinerary.splice(fromIdx, 1)[0];
+          itinerary.splice(toIdx, 0, moved);
           renderItinerary();
-          updateBudgetSummary();
-          updateMap();
-          saveState();
+          scheduleSave();
         });
 
-        // 修改行程 → 進入編輯模式
-        const editToggleBtn = card.querySelector(".day-edit-toggle");
-        if (editToggleBtn) {
-          editToggleBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            editModeDays.add(day.id);
+        // Header
+        const head = document.createElement("div");
+        head.className = "day-head";
+
+        const left = document.createElement("div");
+        left.className = "day-left";
+
+        const h = document.createElement("p");
+        h.className = "day-title";
+        h.innerHTML = `
+          <span>${day.dateLabel}｜${escapeHtml(day.title)}</span>
+          <span class="badge">${day.dayKey.toUpperCase()}</span>
+        `;
+        left.appendChild(h);
+
+        const hint = document.createElement("div");
+        hint.className = "drag-hint";
+        hint.textContent = isEditMode ? "編輯模式中：可修改內容" : "拖曳此卡可重新排序";
+        left.appendChild(hint);
+
+        const actions = document.createElement("div");
+        actions.className = "day-actions";
+
+        if(isEditMode){
+          const delBtn = document.createElement("button");
+          delBtn.className = "btn-danger";
+          delBtn.innerHTML = `<span class="icon i-trash"></span> 刪除`;
+          delBtn.addEventListener("click", () => {
+            if(!confirm(`確定刪除 ${day.dateLabel} ？`)) return;
+            // 同時刪除該日明細
+            expenseDetails = expenseDetails.filter(x => x.dayKey !== day.dayKey);
+            itinerary = itinerary.filter(x => x.dayKey !== day.dayKey);
+            refreshExpenseDaySelect();
             renderItinerary();
+            renderExpenses();
+            scheduleSave();
           });
+          actions.appendChild(delBtn);
         }
 
-        // 新增行程（只有編輯模式有）
-        const addBulletBtn = card.querySelector(".day-add-bullet");
-        if (addBulletBtn) {
-          addBulletBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const id = parseInt(addBulletBtn.dataset.dayId, 10);
-            const d = itinerary.find((x) => x.id === id);
-            if (!d) return;
-            d.bullets.push("（在此輸入新行程項目）");
-            renderItinerary();
-            saveState();
+        head.appendChild(left);
+        head.appendChild(actions);
+
+        // Body
+        const body = document.createElement("div");
+        body.className = "day-body";
+
+        if(!isEditMode){
+          const ul = document.createElement("ul");
+          ul.className = "items";
+          day.items.forEach(line => {
+            const li = document.createElement("li");
+            // ★ 高亮
+            if(line.includes("★")){
+              li.innerHTML = escapeHtml(line).replaceAll("★", `<span class="star">★</span>`);
+            }else{
+              li.textContent = line;
+            }
+            ul.appendChild(li);
           });
+          body.appendChild(ul);
+        }else{
+          const wrap = document.createElement("div");
+          wrap.className = "edit-area";
+
+          const f1 = document.createElement("div");
+          f1.className = "field";
+          f1.innerHTML = `<label>日期標籤（例：Day 1｜1/24（六））</label>`;
+          const inDate = document.createElement("input");
+          inDate.type = "text";
+          inDate.value = day.dateLabel;
+          inDate.addEventListener("input", () => {
+            day.dateLabel = inDate.value;
+            refreshExpenseDaySelect();
+            scheduleSave();
+          });
+          f1.appendChild(inDate);
+
+          const f2 = document.createElement("div");
+          f2.className = "field";
+          f2.innerHTML = `<label>標題（例：抵達大阪・市區暖身）</label>`;
+          const inTitle = document.createElement("input");
+          inTitle.type = "text";
+          inTitle.value = day.title;
+          inTitle.addEventListener("input", () => {
+            day.title = inTitle.value;
+            scheduleSave();
+          });
+          f2.appendChild(inTitle);
+
+          const f3 = document.createElement("div");
+          f3.className = "field";
+          f3.innerHTML = `<label>行程內容（每行一項）</label>`;
+          const ta = document.createElement("textarea");
+          ta.value = day.items.join("\n");
+          ta.addEventListener("input", () => {
+            day.items = ta.value.split("\n").map(s => s.trim()).filter(Boolean);
+            scheduleSave();
+          });
+          f3.appendChild(ta);
+
+          wrap.appendChild(f1);
+          wrap.appendChild(f2);
+          wrap.appendChild(f3);
+          body.appendChild(wrap);
         }
 
-        // 完成修改：離開編輯模式並儲存
-        const finishBtn = card.querySelector(".day-edit-finish");
-        if (finishBtn) {
-          finishBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            // 雖然 focusout 已經會存，但這邊再強制存一次
-            saveState();
-            editModeDays.delete(day.id);
-            renderItinerary();
-          });
-        }
+        // Daily cost row (computed)
+        const costRow = document.createElement("div");
+        costRow.className = "cost-row";
+        const total = getDayTotal(day.dayKey);
+        costRow.innerHTML = `
+          <div>實際花費（JPY）</div>
+          <div class="cost-val">${formatJPY(total)}</div>
+        `;
+        body.appendChild(costRow);
 
+        card.appendChild(head);
+        card.appendChild(body);
         itineraryListEl.appendChild(card);
       });
+    }
 
-      // 明細記帳按鈕
-      document.querySelectorAll(".detail-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const dayId = parseInt(btn.dataset.dayId, 10);
-          openExpensePanel(dayId);
-        });
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    /***********************
+     * 7) 明細記賬 UI
+     ***********************/
+    function refreshExpenseDaySelect(){
+      const old = expDaySelect.value;
+      expDaySelect.innerHTML = "";
+      itinerary.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d.dayKey;
+        opt.textContent = `${d.dateLabel}｜${d.title}`;
+        expDaySelect.appendChild(opt);
       });
-    }
-
-    // 刪除 bullet：事件委派（只有在編輯模式時看得到按鈕）
-    itineraryListEl.addEventListener("click", (e) => {
-      const btn = e.target.closest(".day-bullet-delete");
-      if (!btn) return;
-
-      e.stopPropagation();
-      const dayId = parseInt(btn.dataset.dayId, 10);
-      const idx = parseInt(btn.dataset.bulletIndex, 10);
-      const day = itinerary.find((d) => d.id === dayId);
-      if (!day || Number.isNaN(idx)) return;
-
-      day.bullets.splice(idx, 1);
-      renderItinerary();
-      saveState();
-    });
-
-    function updateBudgetSummary() {
-      const totals = itinerary.reduce(
-        (acc, day) => {
-          acc.min += day.budget.min;
-          acc.max += day.budget.max;
-          acc.actual += day.actualCost != null ? day.actualCost : 0;
-          return acc;
-        },
-        { min: 0, max: 0, actual: 0 }
-      );
-
-      const days = itinerary.length || 1;
-      const minPerDay = Math.round(totals.min / days);
-      const maxPerDay = Math.round(totals.max / days);
-
-      totalRangeEl.textContent =
-        totals.min.toLocaleString() + "〜" + totals.max.toLocaleString();
-      dailyRangeEl.textContent =
-        minPerDay.toLocaleString() + "〜" + maxPerDay.toLocaleString() + " / 日";
-
-      if (totals.actual > 0) {
-        actualTotalEl.textContent = totals.actual.toLocaleString() + " JPY";
-      } else {
-        actualTotalEl.textContent = "尚未填寫";
+      if(old && [...expDaySelect.options].some(o => o.value === old)){
+        expDaySelect.value = old;
       }
     }
 
-    function renderRestaurants() {
-      restaurantListEl.innerHTML = "";
-      restaurants.forEach((r) => {
-        const item = document.createElement("div");
-        item.className = "restaurant-item";
-        item.innerHTML = `
-          <div class="restaurant-info">
-            <div class="restaurant-name">${r.name}</div>
-            <div class="restaurant-tags">${r.area} · ${r.tags}</div>
-            <div class="open-status" data-open-status>
-              點擊右側按鈕後，可在 Google 地圖查看即時營業時間
-            </div>
-          </div>
-          <div class="restaurant-action">
-            <a href="${r.url}" target="_blank" rel="noopener noreferrer">
-              查看地圖 / 訂位
-            </a>
-          </div>
-        `;
-        restaurantListEl.appendChild(item);
+    function renderExpenses(){
+      expenseTbody.innerHTML = "";
+
+      // 按 dayKey / 插入順序簡單排序：先依 itinerary 的順序，再依建立順序
+      const dayOrder = new Map(itinerary.map((d,i)=>[d.dayKey,i]));
+      const rows = [...expenseDetails].sort((a,b)=>{
+        return (dayOrder.get(a.dayKey) ?? 999) - (dayOrder.get(b.dayKey) ?? 999);
       });
-    }
 
-    // 編輯：focusout 時寫回資料（避免每打一個字就存，但仍保留自動存）
-    itineraryListEl.addEventListener(
-      "focusout",
-      (e) => {
-        const target = e.target;
-        const editType = target.dataset.edit;
-        const dayId = parseInt(target.dataset.dayId, 10);
-        if (!editType || !dayId) return;
-
-        const day = itinerary.find((d) => d.id === dayId);
-        if (!day) return;
-
-        if (editType === "title") {
-          day.title = target.textContent.trim();
-        } else if (editType === "description") {
-          day.description = target.textContent.trim();
-        } else if (editType === "bullet") {
-          const idx = parseInt(target.dataset.bulletIndex, 10);
-          if (!Number.isNaN(idx)) {
-            day.bullets[idx] = target.textContent.trim();
-          }
-        }
-        saveState();
-      },
-      true
-    );
-
-    // ===== 記帳面板 =====
-    function openExpensePanel(dayId) {
-      currentExpenseDayId = dayId;
-      const day = itinerary.find((d) => d.id === dayId);
-      if (!day) return;
-
-      expenseTitleMainEl.textContent = `${day.label} · ${day.title}`;
-      expenseTitleSubEl.textContent = `${day.region} · 可記錄 Lok / Wai 的明細及金額`;
-
-      let items = expenseDetails[dayId];
-      if (!Array.isArray(items)) {
-        items = [];
-        expenseDetails[dayId] = items;
-      }
-      renderExpenseTable(items);
-
-      expenseOverlayEl.classList.remove("hidden");
-    }
-
-    function closeExpensePanel() {
-      expenseOverlayEl.classList.add("hidden");
-      currentExpenseDayId = null;
-    }
-
-    function renderExpenseTable(items) {
-      expenseTableBodyEl.innerHTML = "";
-
-      if (!items.length) {
-        items.push({ desc: "", a: "", b: "" });
-      }
-
-      items.forEach((item, index) => {
+      rows.forEach((x) => {
         const tr = document.createElement("tr");
+
+        const day = itinerary.find(d => d.dayKey === x.dayKey);
+        const dayText = day ? day.dateLabel : x.dayKey;
+
         tr.innerHTML = `
-          <td>
-            <input type="text" placeholder="例如：晚餐、JR 車票、滑雪裝備租借"
-                   data-expense-field="desc" data-row-index="${index}"
-                   value="${item.desc || ""}">
-          </td>
-          <td>
-            <input type="number" min="0" step="10" placeholder="0"
-                   data-expense-field="a" data-row-index="${index}"
-                   value="${item.a !== "" && item.a != null ? item.a : ""}">
-          </td>
-          <td>
-            <input type="number" min="0" step="10" placeholder="0"
-                   data-expense-field="b" data-row-index="${index}"
-                   value="${item.b !== "" && item.b != null ? item.b : ""}">
-          </td>
-          <td data-expense-sum data-row-index="${index}"></td>
-          <td style="text-align:center;">
-            <button type="button"
-                    class="expense-remove-row-btn"
-                    data-row-index="${index}">刪除</button>
-          </td>
+          <td>${escapeHtml(dayText)}</td>
+          <td>${escapeHtml(x.payer)}</td>
+          <td>${escapeHtml(x.title)}</td>
+          <td>${formatJPY(x.amount)}</td>
+          <td></td>
         `;
-        expenseTableBodyEl.appendChild(tr);
-      });
 
-      updateExpenseTotals(items);
-      bindExpenseTableEvents(items);
-    }
-
-    function bindExpenseTableEvents(items) {
-      expenseTableBodyEl.querySelectorAll("input[data-expense-field]").forEach((input) => {
-        input.addEventListener("input", () => {
-          const idx = parseInt(input.dataset.rowIndex, 10);
-          const field = input.dataset.expenseField;
-          if (!Number.isFinite(idx)) return;
-
-          if (field === "desc") {
-            items[idx].desc = input.value;
-          } else if (field === "a" || field === "b") {
-            const v = parseFloat(input.value);
-            items[idx][field] = Number.isFinite(v) ? v : "";
-          }
-          updateExpenseTotals(items);
+        const tdBtn = tr.querySelector("td:last-child");
+        const del = document.createElement("button");
+        del.className = "btn-danger";
+        del.style.padding = "7px 9px";
+        del.innerHTML = `<span class="icon i-trash"></span>`;
+        del.title = "刪除";
+        del.addEventListener("click", () => {
+          if(!confirm("刪除這筆明細？")) return;
+          expenseDetails = expenseDetails.filter(e => e.id !== x.id);
+          renderExpenses();
+          renderItinerary(); // 讓每日合計更新
+          scheduleSave();
         });
-      });
+        tdBtn.appendChild(del);
 
-      expenseTableBodyEl.querySelectorAll(".expense-remove-row-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const idx = parseInt(btn.dataset.rowIndex, 10);
-          if (!Number.isFinite(idx)) return;
-          items.splice(idx, 1);
-          renderExpenseTable(items);
-        });
+        expenseTbody.appendChild(tr);
       });
     }
 
-    function updateExpenseTotals(items) {
-      let totalA = 0;
-      let totalB = 0;
+    function addExpense(){
+      const dayKey = expDaySelect.value;
+      const payer = expPayerSelect.value;
+      const title = expTitle.value.trim();
+      const amountRaw = expAmount.value.trim();
 
-      items.forEach((item, idx) => {
-        const a = typeof item.a === "number" ? item.a : parseFloat(item.a);
-        const b = typeof item.b === "number" ? item.b : parseFloat(item.b);
-        const validA = Number.isFinite(a) ? a : 0;
-        const validB = Number.isFinite(b) ? b : 0;
-        const sum = validA + validB;
+      const amount = Number(amountRaw.replaceAll(",",""));
+      if(!dayKey) return alert("請選擇日期");
+      if(!title) return alert("請輸入項目");
+      if(!Number.isFinite(amount) || amount <= 0) return alert("金額請輸入大於 0 的數字（JPY）");
 
-        totalA += validA;
-        totalB += validB;
+      const id = "e_" + Math.random().toString(36).slice(2) + "_" + Date.now();
+      expenseDetails.push({ id, dayKey, payer, title, amount });
 
-        const sumCell = expenseTableBodyEl.querySelector(
-          `td[data-expense-sum][data-row-index="${idx}"]`
-        );
-        if (sumCell) {
-          sumCell.textContent = sum > 0 ? sum.toLocaleString() : "";
+      expTitle.value = "";
+      expAmount.value = "";
+
+      renderExpenses();
+      renderItinerary();
+      scheduleSave();
+    }
+
+    addExpenseBtn.addEventListener("click", addExpense);
+    expAmount.addEventListener("keydown", (e) => {
+      if(e.key === "Enter") addExpense();
+    });
+
+    /***********************
+     * 8) 編輯模式 / 重置排序
+     ***********************/
+    editModeBtn.addEventListener("click", () => {
+      isEditMode = !isEditMode;
+      editModeBtn.classList.toggle("btn-primary", !isEditMode);
+      editModeBtn.classList.toggle("btn-ok", isEditMode);
+      editModeBtn.innerHTML = isEditMode
+        ? `<span class="icon i-save"></span> 完成修改`
+        : `<span class="icon i-edit"></span> 修改行程`;
+      renderItinerary();
+    });
+
+    resetOrderBtn.addEventListener("click", async () => {
+      if(!confirm("確定回到建議排序？這會清除所有雲端記錄，並重建為初始大阪行程。")) return;
+      itinerary = structuredClone(initialItinerary);
+      expenseDetails = structuredClone(initialExpenseDetails);
+      refreshExpenseDaySelect();
+      renderExpenses();
+      renderItinerary();
+      await saveStateToCloud(true);
+    });
+
+    /***********************
+     * 9) Firestore 同步
+     ***********************/
+    async function loadFromCloud(){
+      setSyncState("busy", "連線中…");
+      try{
+        const snap = await getDoc(tripDocRef);
+        if(snap.exists()){
+          const data = snap.data() || {};
+          if(Array.isArray(data.itinerary)) itinerary = data.itinerary;
+          if(Array.isArray(data.expenseDetails)) expenseDetails = data.expenseDetails;
+          setSyncState("ok", "已連線（已載入）");
+        }else{
+          // 雲端沒有就建立一份
+          await setDoc(tripDocRef, { itinerary, expenseDetails });
+          setSyncState("ok", "已連線（已建立）");
         }
-      });
-
-      const both = totalA + totalB;
-
-      expenseTotalAEl.textContent = `Lok：${totalA.toLocaleString()} JPY`;
-      expenseTotalBEl.textContent = `Wai：${totalB.toLocaleString()} JPY`;
-      expenseTotalBothEl.textContent = `兩人合計：${both.toLocaleString()} JPY`;
+      }catch(e){
+        console.warn("讀取雲端失敗：", e);
+        setSyncState("err", "連線失敗（請看 Console）");
+      }
     }
 
-    expenseAddRowBtn.addEventListener("click", () => {
-      if (currentExpenseDayId == null) return;
-      let items = expenseDetails[currentExpenseDayId];
-      if (!Array.isArray(items)) {
-        items = [];
-        expenseDetails[currentExpenseDayId] = items;
-      }
-      items.push({ desc: "", a: "", b: "" });
-      renderExpenseTable(items);
-    });
+    function scheduleSave(){
+      // 避免自己套用遠端更新時又寫回去造成循環
+      if(isApplyingRemote) return;
 
-    expenseSaveBtn.addEventListener("click", () => {
-      if (currentExpenseDayId == null) {
-        closeExpensePanel();
-        return;
-      }
-
-      const rows = Array.from(expenseTableBodyEl.querySelectorAll("tr"));
-      const items = rows
-        .map((tr) => {
-          const descInput = tr.querySelector('input[data-expense-field="desc"]');
-          const aInput = tr.querySelector('input[data-expense-field="a"]');
-          const bInput = tr.querySelector('input[data-expense-field="b"]');
-          const desc = descInput ? descInput.value.trim() : "";
-          const aVal = aInput ? parseFloat(aInput.value) : NaN;
-          const bVal = bInput ? parseFloat(bInput.value) : NaN;
-          return {
-            desc,
-            a: Number.isFinite(aVal) ? aVal : "",
-            b: Number.isFinite(bVal) ? bVal : ""
-          };
-        })
-        .filter((item) => item.desc !== "" || item.a !== "" || item.b !== "");
-
-      expenseDetails[currentExpenseDayId] = items;
-
-      let totalA = 0;
-      let totalB = 0;
-      items.forEach((item) => {
-        const a = typeof item.a === "number" ? item.a : parseFloat(item.a);
-        const b = typeof item.b === "number" ? item.b : parseFloat(item.b);
-        if (Number.isFinite(a)) totalA += a;
-        if (Number.isFinite(b)) totalB += b;
-      });
-      const both = totalA + totalB;
-
-      const day = itinerary.find((d) => d.id === currentExpenseDayId);
-      if (day) {
-        day.actualCost = both > 0 ? both : null;
-      }
-
-      renderItinerary();
-      updateBudgetSummary();
-      updateMap();
-      saveState();
-      closeExpensePanel();
-    });
-
-    expenseCloseBtn.addEventListener("click", () => {
-      closeExpensePanel();
-    });
-
-    expenseOverlayEl.addEventListener("click", (e) => {
-      if (e.target === expenseOverlayEl) {
-        closeExpensePanel();
-      }
-    });
-
-    function renderRestaurantsAndInit() {
-      renderItinerary();
-      updateBudgetSummary();
-      renderRestaurants();
-      updateMap();
-      loadFromCloud();
+      setSyncState("busy", "同步中…");
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => saveStateToCloud(false), 450);
     }
 
-    resetOrderBtn.addEventListener("click", () => {
-      itinerary = JSON.parse(JSON.stringify(initialItinerary));
-      expenseDetails = {};
-      editModeDays = new Set();
-      renderItinerary();
-      updateBudgetSummary();
-      updateMap();
-      saveState();
-    });
+    async function saveStateToCloud(force){
+      try{
+        await setDoc(tripDocRef, { itinerary, expenseDetails });
+        if(force){
+          setSyncState("ok", "已重置並同步");
+        }else{
+          setSyncState("ok", "已同步");
+        }
+      }catch(e){
+        console.warn("儲存到雲端失敗：", e);
+        setSyncState("err", "同步失敗（請看 Console）");
+      }
+    }
 
-    renderRestaurantsAndInit();
-  </script>
-
-  <!-- cache-buster -->
-  <script>
-    (function () {
-      const version = new Date().getTime();
-
-      window.addEventListener('load', function () {
-        document
-          .querySelectorAll('link[rel="stylesheet"][data-versioned="true"]')
-          .forEach(function (link) {
-            try {
-              const url = new URL(link.href);
-              url.searchParams.set('v', version);
-              link.href = url.toString();
-            } catch (e) {}
-          });
-
-        document
-          .querySelectorAll('script[src][data-versioned="true"]')
-          .forEach(function (script) {
-            try {
-              const url = new URL(script.src);
-              url.searchParams.set('v', version);
-              script.src = url.toString();
-            } catch (e) {}
-          });
+    function subscribeCloud(){
+      onSnapshot(tripDocRef, (snap) => {
+        if(!snap.exists()) return;
+        const data = snap.data() || {};
+        // 遠端更新 → 套用到本地
+        isApplyingRemote = true;
+        try{
+          if(Array.isArray(data.itinerary)) itinerary = data.itinerary;
+          if(Array.isArray(data.expenseDetails)) expenseDetails = data.expenseDetails;
+          refreshExpenseDaySelect();
+          renderExpenses();
+          renderItinerary();
+          setSyncState("ok", "已同步（遠端更新）");
+        }finally{
+          // 稍微延遲釋放，避免接續的 render 事件觸發 save
+          setTimeout(() => { isApplyingRemote = false; }, 200);
+        }
+      }, (err) => {
+        console.warn("onSnapshot 失敗：", err);
+        setSyncState("err", "即時同步失敗");
       });
-    })();
+    }
+
+    /***********************
+     * 10) 初始化
+     ***********************/
+    function init(){
+      refreshExpenseDaySelect();
+      renderExpenses();
+      renderItinerary();
+    }
+
+    init();
+    await loadFromCloud();
+    subscribeCloud();
   </script>
+
+  <!--
+    ⚠️ 重要：請把 firebaseConfig 裡的 YOUR_* 替換成你原本已能同步成功的那組設定。
+    如果你原本 HTML 已經有正確的 config，就把那段貼回來即可。
+  -->
 </body>
 </html>
